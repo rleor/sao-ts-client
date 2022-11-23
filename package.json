@@ -15,7 +15,7 @@
   },
   "main": "dist/index.js",
   "exports": {
-    "./saonetwork.sao.did": "./dist/saonetwork.sao.did"
+    "./saonetwork.sao.did": "./dist/saonetwork.sao.did/index.js"
   },
   "publishConfig": {
     "access": "public"
