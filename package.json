@@ -13,9 +13,10 @@
   "scripts": {
     "build": "swc src -d ./dist"
   },
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
   "exports": {
-    "./": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./saonetwork.sao.did": "./dist/saonetwork.sao.did/index.js"
   },
   "publishConfig": {
     "access": "public"
