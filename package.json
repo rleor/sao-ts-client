@@ -14,6 +14,7 @@
     "build": "swc src -d ./dist"
   },
   "main": "./dist/index.js",
+  "type": "module",
   "exports": {
     ".": "./dist/index.js",
     "./saonetwork.sao.did": "./dist/saonetwork.sao.did/index.js"
