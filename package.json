@@ -15,7 +15,7 @@
   },
   "main": "dist/index.js",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist"
   },
   "publishConfig": {
     "access": "public"
