@@ -13,7 +13,7 @@
   "scripts": {
     "build": "swc src -d ./dist"
   },
-  "main": "index.ts",
+  "main": "dist/index.js",
   "publishConfig": {
     "access": "public"
   },
