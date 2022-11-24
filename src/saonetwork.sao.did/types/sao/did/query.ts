@@ -5,6 +5,8 @@ import { AccountAuth } from "./account_auth";
 import { AccountList } from "./account_list";
 import { DidBindingProofs } from "./did_binding_proofs";
 import { Params } from "./params";
+import { SidDocument } from "./sid_document";
+import { SidDocumentVersion } from "./sid_document_version";
 
 export const protobufPackage = "saonetwork.sao.did";
 
@@ -75,6 +77,40 @@ export interface QueryGetAllAccountAuthsRequest {
 
 export interface QueryGetAllAccountAuthsResponse {
   accountAuths: AccountAuth[];
+}
+
+export interface QueryGetSidDocumentRequest {
+  versionId: string;
+}
+
+export interface QueryGetSidDocumentResponse {
+  sidDocument: SidDocument | undefined;
+}
+
+export interface QueryAllSidDocumentRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryAllSidDocumentResponse {
+  sidDocument: SidDocument[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryGetSidDocumentVersionRequest {
+  docId: string;
+}
+
+export interface QueryGetSidDocumentVersionResponse {
+  sidDocumentVersion: SidDocumentVersion | undefined;
+}
+
+export interface QueryAllSidDocumentVersionRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryAllSidDocumentVersionResponse {
+  sidDocumentVersion: SidDocumentVersion[];
+  pagination: PageResponse | undefined;
 }
 
 function createBaseQueryParamsRequest(): QueryParamsRequest {
@@ -924,6 +960,447 @@ export const QueryGetAllAccountAuthsResponse = {
   },
 };
 
+function createBaseQueryGetSidDocumentRequest(): QueryGetSidDocumentRequest {
+  return { versionId: "" };
+}
+
+export const QueryGetSidDocumentRequest = {
+  encode(message: QueryGetSidDocumentRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.versionId !== "") {
+      writer.uint32(10).string(message.versionId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetSidDocumentRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetSidDocumentRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.versionId = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetSidDocumentRequest {
+    return { versionId: isSet(object.versionId) ? String(object.versionId) : "" };
+  },
+
+  toJSON(message: QueryGetSidDocumentRequest): unknown {
+    const obj: any = {};
+    message.versionId !== undefined && (obj.versionId = message.versionId);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetSidDocumentRequest>, I>>(object: I): QueryGetSidDocumentRequest {
+    const message = createBaseQueryGetSidDocumentRequest();
+    message.versionId = object.versionId ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetSidDocumentResponse(): QueryGetSidDocumentResponse {
+  return { sidDocument: undefined };
+}
+
+export const QueryGetSidDocumentResponse = {
+  encode(message: QueryGetSidDocumentResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.sidDocument !== undefined) {
+      SidDocument.encode(message.sidDocument, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetSidDocumentResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetSidDocumentResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.sidDocument = SidDocument.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetSidDocumentResponse {
+    return { sidDocument: isSet(object.sidDocument) ? SidDocument.fromJSON(object.sidDocument) : undefined };
+  },
+
+  toJSON(message: QueryGetSidDocumentResponse): unknown {
+    const obj: any = {};
+    message.sidDocument !== undefined
+      && (obj.sidDocument = message.sidDocument ? SidDocument.toJSON(message.sidDocument) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetSidDocumentResponse>, I>>(object: I): QueryGetSidDocumentResponse {
+    const message = createBaseQueryGetSidDocumentResponse();
+    message.sidDocument = (object.sidDocument !== undefined && object.sidDocument !== null)
+      ? SidDocument.fromPartial(object.sidDocument)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllSidDocumentRequest(): QueryAllSidDocumentRequest {
+  return { pagination: undefined };
+}
+
+export const QueryAllSidDocumentRequest = {
+  encode(message: QueryAllSidDocumentRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllSidDocumentRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllSidDocumentRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllSidDocumentRequest {
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
+  },
+
+  toJSON(message: QueryAllSidDocumentRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined
+      && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAllSidDocumentRequest>, I>>(object: I): QueryAllSidDocumentRequest {
+    const message = createBaseQueryAllSidDocumentRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllSidDocumentResponse(): QueryAllSidDocumentResponse {
+  return { sidDocument: [], pagination: undefined };
+}
+
+export const QueryAllSidDocumentResponse = {
+  encode(message: QueryAllSidDocumentResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.sidDocument) {
+      SidDocument.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllSidDocumentResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllSidDocumentResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.sidDocument.push(SidDocument.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllSidDocumentResponse {
+    return {
+      sidDocument: Array.isArray(object?.sidDocument)
+        ? object.sidDocument.map((e: any) => SidDocument.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
+  },
+
+  toJSON(message: QueryAllSidDocumentResponse): unknown {
+    const obj: any = {};
+    if (message.sidDocument) {
+      obj.sidDocument = message.sidDocument.map((e) => e ? SidDocument.toJSON(e) : undefined);
+    } else {
+      obj.sidDocument = [];
+    }
+    message.pagination !== undefined
+      && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAllSidDocumentResponse>, I>>(object: I): QueryAllSidDocumentResponse {
+    const message = createBaseQueryAllSidDocumentResponse();
+    message.sidDocument = object.sidDocument?.map((e) => SidDocument.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryGetSidDocumentVersionRequest(): QueryGetSidDocumentVersionRequest {
+  return { docId: "" };
+}
+
+export const QueryGetSidDocumentVersionRequest = {
+  encode(message: QueryGetSidDocumentVersionRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.docId !== "") {
+      writer.uint32(10).string(message.docId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetSidDocumentVersionRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetSidDocumentVersionRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.docId = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetSidDocumentVersionRequest {
+    return { docId: isSet(object.docId) ? String(object.docId) : "" };
+  },
+
+  toJSON(message: QueryGetSidDocumentVersionRequest): unknown {
+    const obj: any = {};
+    message.docId !== undefined && (obj.docId = message.docId);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetSidDocumentVersionRequest>, I>>(
+    object: I,
+  ): QueryGetSidDocumentVersionRequest {
+    const message = createBaseQueryGetSidDocumentVersionRequest();
+    message.docId = object.docId ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetSidDocumentVersionResponse(): QueryGetSidDocumentVersionResponse {
+  return { sidDocumentVersion: undefined };
+}
+
+export const QueryGetSidDocumentVersionResponse = {
+  encode(message: QueryGetSidDocumentVersionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.sidDocumentVersion !== undefined) {
+      SidDocumentVersion.encode(message.sidDocumentVersion, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetSidDocumentVersionResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetSidDocumentVersionResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.sidDocumentVersion = SidDocumentVersion.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetSidDocumentVersionResponse {
+    return {
+      sidDocumentVersion: isSet(object.sidDocumentVersion)
+        ? SidDocumentVersion.fromJSON(object.sidDocumentVersion)
+        : undefined,
+    };
+  },
+
+  toJSON(message: QueryGetSidDocumentVersionResponse): unknown {
+    const obj: any = {};
+    message.sidDocumentVersion !== undefined && (obj.sidDocumentVersion = message.sidDocumentVersion
+      ? SidDocumentVersion.toJSON(message.sidDocumentVersion)
+      : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetSidDocumentVersionResponse>, I>>(
+    object: I,
+  ): QueryGetSidDocumentVersionResponse {
+    const message = createBaseQueryGetSidDocumentVersionResponse();
+    message.sidDocumentVersion = (object.sidDocumentVersion !== undefined && object.sidDocumentVersion !== null)
+      ? SidDocumentVersion.fromPartial(object.sidDocumentVersion)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllSidDocumentVersionRequest(): QueryAllSidDocumentVersionRequest {
+  return { pagination: undefined };
+}
+
+export const QueryAllSidDocumentVersionRequest = {
+  encode(message: QueryAllSidDocumentVersionRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllSidDocumentVersionRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllSidDocumentVersionRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllSidDocumentVersionRequest {
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
+  },
+
+  toJSON(message: QueryAllSidDocumentVersionRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined
+      && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAllSidDocumentVersionRequest>, I>>(
+    object: I,
+  ): QueryAllSidDocumentVersionRequest {
+    const message = createBaseQueryAllSidDocumentVersionRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllSidDocumentVersionResponse(): QueryAllSidDocumentVersionResponse {
+  return { sidDocumentVersion: [], pagination: undefined };
+}
+
+export const QueryAllSidDocumentVersionResponse = {
+  encode(message: QueryAllSidDocumentVersionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.sidDocumentVersion) {
+      SidDocumentVersion.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllSidDocumentVersionResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllSidDocumentVersionResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.sidDocumentVersion.push(SidDocumentVersion.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllSidDocumentVersionResponse {
+    return {
+      sidDocumentVersion: Array.isArray(object?.sidDocumentVersion)
+        ? object.sidDocumentVersion.map((e: any) => SidDocumentVersion.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
+  },
+
+  toJSON(message: QueryAllSidDocumentVersionResponse): unknown {
+    const obj: any = {};
+    if (message.sidDocumentVersion) {
+      obj.sidDocumentVersion = message.sidDocumentVersion.map((e) => e ? SidDocumentVersion.toJSON(e) : undefined);
+    } else {
+      obj.sidDocumentVersion = [];
+    }
+    message.pagination !== undefined
+      && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAllSidDocumentVersionResponse>, I>>(
+    object: I,
+  ): QueryAllSidDocumentVersionResponse {
+    const message = createBaseQueryAllSidDocumentVersionResponse();
+    message.sidDocumentVersion = object.sidDocumentVersion?.map((e) => SidDocumentVersion.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -942,6 +1419,14 @@ export interface Query {
   AccountAuthAll(request: QueryAllAccountAuthRequest): Promise<QueryAllAccountAuthResponse>;
   /** Queries a list of GetAllAccountAuth items. */
   GetAllAccountAuths(request: QueryGetAllAccountAuthsRequest): Promise<QueryGetAllAccountAuthsResponse>;
+  /** Queries a SidDocument by index. */
+  SidDocument(request: QueryGetSidDocumentRequest): Promise<QueryGetSidDocumentResponse>;
+  /** Queries a list of SidDocument items. */
+  SidDocumentAll(request: QueryAllSidDocumentRequest): Promise<QueryAllSidDocumentResponse>;
+  /** Queries a SidDocumentVersion by index. */
+  SidDocumentVersion(request: QueryGetSidDocumentVersionRequest): Promise<QueryGetSidDocumentVersionResponse>;
+  /** Queries a list of SidDocumentVersion items. */
+  SidDocumentVersionAll(request: QueryAllSidDocumentVersionRequest): Promise<QueryAllSidDocumentVersionResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -956,6 +1441,10 @@ export class QueryClientImpl implements Query {
     this.AccountAuth = this.AccountAuth.bind(this);
     this.AccountAuthAll = this.AccountAuthAll.bind(this);
     this.GetAllAccountAuths = this.GetAllAccountAuths.bind(this);
+    this.SidDocument = this.SidDocument.bind(this);
+    this.SidDocumentAll = this.SidDocumentAll.bind(this);
+    this.SidDocumentVersion = this.SidDocumentVersion.bind(this);
+    this.SidDocumentVersionAll = this.SidDocumentVersionAll.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -1003,6 +1492,30 @@ export class QueryClientImpl implements Query {
     const data = QueryGetAllAccountAuthsRequest.encode(request).finish();
     const promise = this.rpc.request("saonetwork.sao.did.Query", "GetAllAccountAuths", data);
     return promise.then((data) => QueryGetAllAccountAuthsResponse.decode(new _m0.Reader(data)));
+  }
+
+  SidDocument(request: QueryGetSidDocumentRequest): Promise<QueryGetSidDocumentResponse> {
+    const data = QueryGetSidDocumentRequest.encode(request).finish();
+    const promise = this.rpc.request("saonetwork.sao.did.Query", "SidDocument", data);
+    return promise.then((data) => QueryGetSidDocumentResponse.decode(new _m0.Reader(data)));
+  }
+
+  SidDocumentAll(request: QueryAllSidDocumentRequest): Promise<QueryAllSidDocumentResponse> {
+    const data = QueryAllSidDocumentRequest.encode(request).finish();
+    const promise = this.rpc.request("saonetwork.sao.did.Query", "SidDocumentAll", data);
+    return promise.then((data) => QueryAllSidDocumentResponse.decode(new _m0.Reader(data)));
+  }
+
+  SidDocumentVersion(request: QueryGetSidDocumentVersionRequest): Promise<QueryGetSidDocumentVersionResponse> {
+    const data = QueryGetSidDocumentVersionRequest.encode(request).finish();
+    const promise = this.rpc.request("saonetwork.sao.did.Query", "SidDocumentVersion", data);
+    return promise.then((data) => QueryGetSidDocumentVersionResponse.decode(new _m0.Reader(data)));
+  }
+
+  SidDocumentVersionAll(request: QueryAllSidDocumentVersionRequest): Promise<QueryAllSidDocumentVersionResponse> {
+    const data = QueryAllSidDocumentVersionRequest.encode(request).finish();
+    const promise = this.rpc.request("saonetwork.sao.did.Query", "SidDocumentVersionAll", data);
+    return promise.then((data) => QueryAllSidDocumentVersionResponse.decode(new _m0.Reader(data)));
   }
 }
 

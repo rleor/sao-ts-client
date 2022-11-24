@@ -16,6 +16,8 @@ import { AccountAuth } from "./account_auth";
 import { AccountList } from "./account_list";
 import { DidBindingProofs } from "./did_binding_proofs";
 import { Params } from "./params";
+import { SidDocument } from "./sid_document";
+import { SidDocumentVersion } from "./sid_document_version";
 export var protobufPackage = "saonetwork.sao.did";
 function createBaseQueryParamsRequest() {
     return {};
@@ -887,6 +889,452 @@ export var QueryGetAllAccountAuthsResponse = {
         return message;
     }
 };
+function createBaseQueryGetSidDocumentRequest() {
+    return {
+        versionId: ""
+    };
+}
+export var QueryGetSidDocumentRequest = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.versionId !== "") {
+            writer.uint32(10).string(message.versionId);
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseQueryGetSidDocumentRequest();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.versionId = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            versionId: isSet(object.versionId) ? String(object.versionId) : ""
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.versionId !== undefined && (obj.versionId = message.versionId);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseQueryGetSidDocumentRequest();
+        var _object_versionId;
+        message.versionId = (_object_versionId = object.versionId) !== null && _object_versionId !== void 0 ? _object_versionId : "";
+        return message;
+    }
+};
+function createBaseQueryGetSidDocumentResponse() {
+    return {
+        sidDocument: undefined
+    };
+}
+export var QueryGetSidDocumentResponse = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.sidDocument !== undefined) {
+            SidDocument.encode(message.sidDocument, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseQueryGetSidDocumentResponse();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.sidDocument = SidDocument.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            sidDocument: isSet(object.sidDocument) ? SidDocument.fromJSON(object.sidDocument) : undefined
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.sidDocument !== undefined && (obj.sidDocument = message.sidDocument ? SidDocument.toJSON(message.sidDocument) : undefined);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseQueryGetSidDocumentResponse();
+        message.sidDocument = object.sidDocument !== undefined && object.sidDocument !== null ? SidDocument.fromPartial(object.sidDocument) : undefined;
+        return message;
+    }
+};
+function createBaseQueryAllSidDocumentRequest() {
+    return {
+        pagination: undefined
+    };
+}
+export var QueryAllSidDocumentRequest = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.pagination !== undefined) {
+            PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseQueryAllSidDocumentRequest();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.pagination = PageRequest.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseQueryAllSidDocumentRequest();
+        message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+        return message;
+    }
+};
+function createBaseQueryAllSidDocumentResponse() {
+    return {
+        sidDocument: [],
+        pagination: undefined
+    };
+}
+export var QueryAllSidDocumentResponse = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
+        try {
+            for(var _iterator = message.sidDocument[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true){
+                var v = _step.value;
+                SidDocument.encode(v, writer.uint32(10).fork()).ldelim();
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally{
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return != null) {
+                    _iterator.return();
+                }
+            } finally{
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
+        }
+        if (message.pagination !== undefined) {
+            PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseQueryAllSidDocumentResponse();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.sidDocument.push(SidDocument.decode(reader, reader.uint32()));
+                    break;
+                case 2:
+                    message.pagination = PageResponse.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            sidDocument: Array.isArray(object === null || object === void 0 ? void 0 : object.sidDocument) ? object.sidDocument.map(function(e) {
+                return SidDocument.fromJSON(e);
+            }) : [],
+            pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        if (message.sidDocument) {
+            obj.sidDocument = message.sidDocument.map(function(e) {
+                return e ? SidDocument.toJSON(e) : undefined;
+            });
+        } else {
+            obj.sidDocument = [];
+        }
+        message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var _object_sidDocument;
+        var message = createBaseQueryAllSidDocumentResponse();
+        message.sidDocument = ((_object_sidDocument = object.sidDocument) === null || _object_sidDocument === void 0 ? void 0 : _object_sidDocument.map(function(e) {
+            return SidDocument.fromPartial(e);
+        })) || [];
+        message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+        return message;
+    }
+};
+function createBaseQueryGetSidDocumentVersionRequest() {
+    return {
+        docId: ""
+    };
+}
+export var QueryGetSidDocumentVersionRequest = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.docId !== "") {
+            writer.uint32(10).string(message.docId);
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseQueryGetSidDocumentVersionRequest();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.docId = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            docId: isSet(object.docId) ? String(object.docId) : ""
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.docId !== undefined && (obj.docId = message.docId);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseQueryGetSidDocumentVersionRequest();
+        var _object_docId;
+        message.docId = (_object_docId = object.docId) !== null && _object_docId !== void 0 ? _object_docId : "";
+        return message;
+    }
+};
+function createBaseQueryGetSidDocumentVersionResponse() {
+    return {
+        sidDocumentVersion: undefined
+    };
+}
+export var QueryGetSidDocumentVersionResponse = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.sidDocumentVersion !== undefined) {
+            SidDocumentVersion.encode(message.sidDocumentVersion, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseQueryGetSidDocumentVersionResponse();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.sidDocumentVersion = SidDocumentVersion.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            sidDocumentVersion: isSet(object.sidDocumentVersion) ? SidDocumentVersion.fromJSON(object.sidDocumentVersion) : undefined
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.sidDocumentVersion !== undefined && (obj.sidDocumentVersion = message.sidDocumentVersion ? SidDocumentVersion.toJSON(message.sidDocumentVersion) : undefined);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseQueryGetSidDocumentVersionResponse();
+        message.sidDocumentVersion = object.sidDocumentVersion !== undefined && object.sidDocumentVersion !== null ? SidDocumentVersion.fromPartial(object.sidDocumentVersion) : undefined;
+        return message;
+    }
+};
+function createBaseQueryAllSidDocumentVersionRequest() {
+    return {
+        pagination: undefined
+    };
+}
+export var QueryAllSidDocumentVersionRequest = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.pagination !== undefined) {
+            PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseQueryAllSidDocumentVersionRequest();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.pagination = PageRequest.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseQueryAllSidDocumentVersionRequest();
+        message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+        return message;
+    }
+};
+function createBaseQueryAllSidDocumentVersionResponse() {
+    return {
+        sidDocumentVersion: [],
+        pagination: undefined
+    };
+}
+export var QueryAllSidDocumentVersionResponse = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
+        try {
+            for(var _iterator = message.sidDocumentVersion[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true){
+                var v = _step.value;
+                SidDocumentVersion.encode(v, writer.uint32(10).fork()).ldelim();
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally{
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return != null) {
+                    _iterator.return();
+                }
+            } finally{
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
+        }
+        if (message.pagination !== undefined) {
+            PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseQueryAllSidDocumentVersionResponse();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.sidDocumentVersion.push(SidDocumentVersion.decode(reader, reader.uint32()));
+                    break;
+                case 2:
+                    message.pagination = PageResponse.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            sidDocumentVersion: Array.isArray(object === null || object === void 0 ? void 0 : object.sidDocumentVersion) ? object.sidDocumentVersion.map(function(e) {
+                return SidDocumentVersion.fromJSON(e);
+            }) : [],
+            pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        if (message.sidDocumentVersion) {
+            obj.sidDocumentVersion = message.sidDocumentVersion.map(function(e) {
+                return e ? SidDocumentVersion.toJSON(e) : undefined;
+            });
+        } else {
+            obj.sidDocumentVersion = [];
+        }
+        message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var _object_sidDocumentVersion;
+        var message = createBaseQueryAllSidDocumentVersionResponse();
+        message.sidDocumentVersion = ((_object_sidDocumentVersion = object.sidDocumentVersion) === null || _object_sidDocumentVersion === void 0 ? void 0 : _object_sidDocumentVersion.map(function(e) {
+            return SidDocumentVersion.fromPartial(e);
+        })) || [];
+        message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+        return message;
+    }
+};
 export var QueryClientImpl = /*#__PURE__*/ function() {
     "use strict";
     function QueryClientImpl(rpc) {
@@ -900,6 +1348,10 @@ export var QueryClientImpl = /*#__PURE__*/ function() {
         this.AccountAuth = this.AccountAuth.bind(this);
         this.AccountAuthAll = this.AccountAuthAll.bind(this);
         this.GetAllAccountAuths = this.GetAllAccountAuths.bind(this);
+        this.SidDocument = this.SidDocument.bind(this);
+        this.SidDocumentAll = this.SidDocumentAll.bind(this);
+        this.SidDocumentVersion = this.SidDocumentVersion.bind(this);
+        this.SidDocumentVersionAll = this.SidDocumentVersionAll.bind(this);
     }
     var _proto = QueryClientImpl.prototype;
     _proto.Params = function Params(request) {
@@ -956,6 +1408,34 @@ export var QueryClientImpl = /*#__PURE__*/ function() {
         var promise = this.rpc.request("saonetwork.sao.did.Query", "GetAllAccountAuths", data);
         return promise.then(function(data) {
             return QueryGetAllAccountAuthsResponse.decode(new _m0.Reader(data));
+        });
+    };
+    _proto.SidDocument = function SidDocument(request) {
+        var data = QueryGetSidDocumentRequest.encode(request).finish();
+        var promise = this.rpc.request("saonetwork.sao.did.Query", "SidDocument", data);
+        return promise.then(function(data) {
+            return QueryGetSidDocumentResponse.decode(new _m0.Reader(data));
+        });
+    };
+    _proto.SidDocumentAll = function SidDocumentAll(request) {
+        var data = QueryAllSidDocumentRequest.encode(request).finish();
+        var promise = this.rpc.request("saonetwork.sao.did.Query", "SidDocumentAll", data);
+        return promise.then(function(data) {
+            return QueryAllSidDocumentResponse.decode(new _m0.Reader(data));
+        });
+    };
+    _proto.SidDocumentVersion = function SidDocumentVersion(request) {
+        var data = QueryGetSidDocumentVersionRequest.encode(request).finish();
+        var promise = this.rpc.request("saonetwork.sao.did.Query", "SidDocumentVersion", data);
+        return promise.then(function(data) {
+            return QueryGetSidDocumentVersionResponse.decode(new _m0.Reader(data));
+        });
+    };
+    _proto.SidDocumentVersionAll = function SidDocumentVersionAll(request) {
+        var data = QueryAllSidDocumentVersionRequest.encode(request).finish();
+        var promise = this.rpc.request("saonetwork.sao.did.Query", "SidDocumentVersionAll", data);
+        return promise.then(function(data) {
+            return QueryAllSidDocumentVersionResponse.decode(new _m0.Reader(data));
         });
     };
     return QueryClientImpl;

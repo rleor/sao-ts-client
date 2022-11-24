@@ -41,6 +41,17 @@ export interface MsgUpdateAccountAuths {
 export interface MsgUpdateAccountAuthsResponse {
 }
 
+export interface MsgUpdateSidDocument {
+  creator: string;
+  signingKey: string;
+  encryptKey: string;
+  rootDocId: string;
+}
+
+export interface MsgUpdateSidDocumentResponse {
+  docId: string;
+}
+
 function createBaseMsgAddBinding(): MsgAddBinding {
   return { creator: "", accountId: "", proof: undefined };
 }
@@ -478,13 +489,137 @@ export const MsgUpdateAccountAuthsResponse = {
   },
 };
 
+function createBaseMsgUpdateSidDocument(): MsgUpdateSidDocument {
+  return { creator: "", signingKey: "", encryptKey: "", rootDocId: "" };
+}
+
+export const MsgUpdateSidDocument = {
+  encode(message: MsgUpdateSidDocument, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.signingKey !== "") {
+      writer.uint32(18).string(message.signingKey);
+    }
+    if (message.encryptKey !== "") {
+      writer.uint32(26).string(message.encryptKey);
+    }
+    if (message.rootDocId !== "") {
+      writer.uint32(34).string(message.rootDocId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateSidDocument {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateSidDocument();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.signingKey = reader.string();
+          break;
+        case 3:
+          message.encryptKey = reader.string();
+          break;
+        case 4:
+          message.rootDocId = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateSidDocument {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      signingKey: isSet(object.signingKey) ? String(object.signingKey) : "",
+      encryptKey: isSet(object.encryptKey) ? String(object.encryptKey) : "",
+      rootDocId: isSet(object.rootDocId) ? String(object.rootDocId) : "",
+    };
+  },
+
+  toJSON(message: MsgUpdateSidDocument): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.signingKey !== undefined && (obj.signingKey = message.signingKey);
+    message.encryptKey !== undefined && (obj.encryptKey = message.encryptKey);
+    message.rootDocId !== undefined && (obj.rootDocId = message.rootDocId);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateSidDocument>, I>>(object: I): MsgUpdateSidDocument {
+    const message = createBaseMsgUpdateSidDocument();
+    message.creator = object.creator ?? "";
+    message.signingKey = object.signingKey ?? "";
+    message.encryptKey = object.encryptKey ?? "";
+    message.rootDocId = object.rootDocId ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgUpdateSidDocumentResponse(): MsgUpdateSidDocumentResponse {
+  return { docId: "" };
+}
+
+export const MsgUpdateSidDocumentResponse = {
+  encode(message: MsgUpdateSidDocumentResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.docId !== "") {
+      writer.uint32(10).string(message.docId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateSidDocumentResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateSidDocumentResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.docId = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdateSidDocumentResponse {
+    return { docId: isSet(object.docId) ? String(object.docId) : "" };
+  },
+
+  toJSON(message: MsgUpdateSidDocumentResponse): unknown {
+    const obj: any = {};
+    message.docId !== undefined && (obj.docId = message.docId);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateSidDocumentResponse>, I>>(object: I): MsgUpdateSidDocumentResponse {
+    const message = createBaseMsgUpdateSidDocumentResponse();
+    message.docId = object.docId ?? "";
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   AddBinding(request: MsgAddBinding): Promise<MsgAddBindingResponse>;
   Unbinding(request: MsgUnbinding): Promise<MsgUnbindingResponse>;
   AddAccountAuth(request: MsgAddAccountAuth): Promise<MsgAddAccountAuthResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   UpdateAccountAuths(request: MsgUpdateAccountAuths): Promise<MsgUpdateAccountAuthsResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  UpdateSidDocument(request: MsgUpdateSidDocument): Promise<MsgUpdateSidDocumentResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -495,6 +630,7 @@ export class MsgClientImpl implements Msg {
     this.Unbinding = this.Unbinding.bind(this);
     this.AddAccountAuth = this.AddAccountAuth.bind(this);
     this.UpdateAccountAuths = this.UpdateAccountAuths.bind(this);
+    this.UpdateSidDocument = this.UpdateSidDocument.bind(this);
   }
   AddBinding(request: MsgAddBinding): Promise<MsgAddBindingResponse> {
     const data = MsgAddBinding.encode(request).finish();
@@ -518,6 +654,12 @@ export class MsgClientImpl implements Msg {
     const data = MsgUpdateAccountAuths.encode(request).finish();
     const promise = this.rpc.request("saonetwork.sao.did.Msg", "UpdateAccountAuths", data);
     return promise.then((data) => MsgUpdateAccountAuthsResponse.decode(new _m0.Reader(data)));
+  }
+
+  UpdateSidDocument(request: MsgUpdateSidDocument): Promise<MsgUpdateSidDocumentResponse> {
+    const data = MsgUpdateSidDocument.encode(request).finish();
+    const promise = this.rpc.request("saonetwork.sao.did.Msg", "UpdateSidDocument", data);
+    return promise.then((data) => MsgUpdateSidDocumentResponse.decode(new _m0.Reader(data)));
   }
 }
 

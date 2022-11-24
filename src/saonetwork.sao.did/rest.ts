@@ -45,6 +45,10 @@ export type DidMsgUnbindingResponse = object;
 
 export type DidMsgUpdateAccountAuthsResponse = object;
 
+export interface DidMsgUpdateSidDocumentResponse {
+  docId?: string;
+}
+
 /**
  * Params defines the parameters for the module.
  */
@@ -95,6 +99,36 @@ export interface DidQueryAllDidBindingProofsResponse {
   pagination?: V1Beta1PageResponse;
 }
 
+export interface DidQueryAllSidDocumentResponse {
+  sidDocument?: DidSidDocument[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
+export interface DidQueryAllSidDocumentVersionResponse {
+  sidDocumentVersion?: DidSidDocumentVersion[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
 export interface DidQueryGetAccountAuthResponse {
   accountAuth?: DidAccountAuth;
 }
@@ -111,12 +145,31 @@ export interface DidQueryGetDidBindingProofsResponse {
   didBindingProofs?: DidDidBindingProofs;
 }
 
+export interface DidQueryGetSidDocumentResponse {
+  sidDocument?: DidSidDocument;
+}
+
+export interface DidQueryGetSidDocumentVersionResponse {
+  sidDocumentVersion?: DidSidDocumentVersion;
+}
+
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
 export interface DidQueryParamsResponse {
   /** params holds all the parameters of this module. */
   params?: DidParams;
+}
+
+export interface DidSidDocument {
+  versionId?: string;
+  signing?: string;
+  encryption?: string;
+}
+
+export interface DidSidDocumentVersion {
+  docId?: string;
+  versionList?: string[];
 }
 
 export interface ProtobufAny {
@@ -480,6 +533,90 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryParams = (params: RequestParams = {}) =>
     this.request<DidQueryParamsResponse, RpcStatus>({
       path: `/SaoNetwork/sao/did/params`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySidDocumentAll
+   * @summary Queries a list of SidDocument items.
+   * @request GET:/SaoNetwork/sao/did/sid_document
+   */
+  querySidDocumentAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<DidQueryAllSidDocumentResponse, RpcStatus>({
+      path: `/SaoNetwork/sao/did/sid_document`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySidDocument
+   * @summary Queries a SidDocument by index.
+   * @request GET:/SaoNetwork/sao/did/sid_document/{versionId}
+   */
+  querySidDocument = (versionId: string, params: RequestParams = {}) =>
+    this.request<DidQueryGetSidDocumentResponse, RpcStatus>({
+      path: `/SaoNetwork/sao/did/sid_document/${versionId}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySidDocumentVersionAll
+   * @summary Queries a list of SidDocumentVersion items.
+   * @request GET:/SaoNetwork/sao/did/sid_document_version
+   */
+  querySidDocumentVersionAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<DidQueryAllSidDocumentVersionResponse, RpcStatus>({
+      path: `/SaoNetwork/sao/did/sid_document_version`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySidDocumentVersion
+   * @summary Queries a SidDocumentVersion by index.
+   * @request GET:/SaoNetwork/sao/did/sid_document_version/{docId}
+   */
+  querySidDocumentVersion = (docId: string, params: RequestParams = {}) =>
+    this.request<DidQueryGetSidDocumentVersionResponse, RpcStatus>({
+      path: `/SaoNetwork/sao/did/sid_document_version/${docId}`,
       method: "GET",
       format: "json",
       ...params,

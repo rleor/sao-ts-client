@@ -10,13 +10,17 @@ import { AccountAuth } from "./account_auth";
 import { AccountList } from "./account_list";
 import { DidBindingProofs } from "./did_binding_proofs";
 import { Params } from "./params";
+import { SidDocument } from "./sid_document";
+import { SidDocumentVersion } from "./sid_document_version";
 export var protobufPackage = "saonetwork.sao.did";
 function createBaseGenesisState() {
     return {
         params: undefined,
         didBindingProofsList: [],
         accountListList: [],
-        accountAuthList: []
+        accountAuthList: [],
+        sidDocumentList: [],
+        sidDocumentVersionList: []
     };
 }
 export var GenesisState = {
@@ -85,6 +89,46 @@ export var GenesisState = {
                 }
             }
         }
+        var _iteratorNormalCompletion3 = true, _didIteratorError3 = false, _iteratorError3 = undefined;
+        try {
+            for(var _iterator3 = message.sidDocumentList[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true){
+                var v3 = _step3.value;
+                SidDocument.encode(v3, writer.uint32(42).fork()).ldelim();
+            }
+        } catch (err) {
+            _didIteratorError3 = true;
+            _iteratorError3 = err;
+        } finally{
+            try {
+                if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+                    _iterator3.return();
+                }
+            } finally{
+                if (_didIteratorError3) {
+                    throw _iteratorError3;
+                }
+            }
+        }
+        var _iteratorNormalCompletion4 = true, _didIteratorError4 = false, _iteratorError4 = undefined;
+        try {
+            for(var _iterator4 = message.sidDocumentVersionList[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true){
+                var v4 = _step4.value;
+                SidDocumentVersion.encode(v4, writer.uint32(50).fork()).ldelim();
+            }
+        } catch (err) {
+            _didIteratorError4 = true;
+            _iteratorError4 = err;
+        } finally{
+            try {
+                if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
+                    _iterator4.return();
+                }
+            } finally{
+                if (_didIteratorError4) {
+                    throw _iteratorError4;
+                }
+            }
+        }
         return writer;
     },
     decode: function decode(input, length) {
@@ -106,6 +150,12 @@ export var GenesisState = {
                 case 4:
                     message.accountAuthList.push(AccountAuth.decode(reader, reader.uint32()));
                     break;
+                case 5:
+                    message.sidDocumentList.push(SidDocument.decode(reader, reader.uint32()));
+                    break;
+                case 6:
+                    message.sidDocumentVersionList.push(SidDocumentVersion.decode(reader, reader.uint32()));
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -124,6 +174,12 @@ export var GenesisState = {
             }) : [],
             accountAuthList: Array.isArray(object === null || object === void 0 ? void 0 : object.accountAuthList) ? object.accountAuthList.map(function(e) {
                 return AccountAuth.fromJSON(e);
+            }) : [],
+            sidDocumentList: Array.isArray(object === null || object === void 0 ? void 0 : object.sidDocumentList) ? object.sidDocumentList.map(function(e) {
+                return SidDocument.fromJSON(e);
+            }) : [],
+            sidDocumentVersionList: Array.isArray(object === null || object === void 0 ? void 0 : object.sidDocumentVersionList) ? object.sidDocumentVersionList.map(function(e) {
+                return SidDocumentVersion.fromJSON(e);
             }) : []
         };
     },
@@ -151,10 +207,24 @@ export var GenesisState = {
         } else {
             obj.accountAuthList = [];
         }
+        if (message.sidDocumentList) {
+            obj.sidDocumentList = message.sidDocumentList.map(function(e) {
+                return e ? SidDocument.toJSON(e) : undefined;
+            });
+        } else {
+            obj.sidDocumentList = [];
+        }
+        if (message.sidDocumentVersionList) {
+            obj.sidDocumentVersionList = message.sidDocumentVersionList.map(function(e) {
+                return e ? SidDocumentVersion.toJSON(e) : undefined;
+            });
+        } else {
+            obj.sidDocumentVersionList = [];
+        }
         return obj;
     },
     fromPartial: function fromPartial(object) {
-        var _object_didBindingProofsList, _object_accountListList, _object_accountAuthList;
+        var _object_didBindingProofsList, _object_accountListList, _object_accountAuthList, _object_sidDocumentList, _object_sidDocumentVersionList;
         var message = createBaseGenesisState();
         message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
         message.didBindingProofsList = ((_object_didBindingProofsList = object.didBindingProofsList) === null || _object_didBindingProofsList === void 0 ? void 0 : _object_didBindingProofsList.map(function(e) {
@@ -165,6 +235,12 @@ export var GenesisState = {
         })) || [];
         message.accountAuthList = ((_object_accountAuthList = object.accountAuthList) === null || _object_accountAuthList === void 0 ? void 0 : _object_accountAuthList.map(function(e) {
             return AccountAuth.fromPartial(e);
+        })) || [];
+        message.sidDocumentList = ((_object_sidDocumentList = object.sidDocumentList) === null || _object_sidDocumentList === void 0 ? void 0 : _object_sidDocumentList.map(function(e) {
+            return SidDocument.fromPartial(e);
+        })) || [];
+        message.sidDocumentVersionList = ((_object_sidDocumentVersionList = object.sidDocumentVersionList) === null || _object_sidDocumentVersionList === void 0 ? void 0 : _object_sidDocumentVersionList.map(function(e) {
+            return SidDocumentVersion.fromPartial(e);
         })) || [];
         return message;
     }

@@ -477,6 +477,133 @@ export var MsgUpdateAccountAuthsResponse = {
         return message;
     }
 };
+function createBaseMsgUpdateSidDocument() {
+    return {
+        creator: "",
+        signingKey: "",
+        encryptKey: "",
+        rootDocId: ""
+    };
+}
+export var MsgUpdateSidDocument = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.signingKey !== "") {
+            writer.uint32(18).string(message.signingKey);
+        }
+        if (message.encryptKey !== "") {
+            writer.uint32(26).string(message.encryptKey);
+        }
+        if (message.rootDocId !== "") {
+            writer.uint32(34).string(message.rootDocId);
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseMsgUpdateSidDocument();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.signingKey = reader.string();
+                    break;
+                case 3:
+                    message.encryptKey = reader.string();
+                    break;
+                case 4:
+                    message.rootDocId = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            creator: isSet(object.creator) ? String(object.creator) : "",
+            signingKey: isSet(object.signingKey) ? String(object.signingKey) : "",
+            encryptKey: isSet(object.encryptKey) ? String(object.encryptKey) : "",
+            rootDocId: isSet(object.rootDocId) ? String(object.rootDocId) : ""
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.signingKey !== undefined && (obj.signingKey = message.signingKey);
+        message.encryptKey !== undefined && (obj.encryptKey = message.encryptKey);
+        message.rootDocId !== undefined && (obj.rootDocId = message.rootDocId);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseMsgUpdateSidDocument();
+        var _object_creator;
+        message.creator = (_object_creator = object.creator) !== null && _object_creator !== void 0 ? _object_creator : "";
+        var _object_signingKey;
+        message.signingKey = (_object_signingKey = object.signingKey) !== null && _object_signingKey !== void 0 ? _object_signingKey : "";
+        var _object_encryptKey;
+        message.encryptKey = (_object_encryptKey = object.encryptKey) !== null && _object_encryptKey !== void 0 ? _object_encryptKey : "";
+        var _object_rootDocId;
+        message.rootDocId = (_object_rootDocId = object.rootDocId) !== null && _object_rootDocId !== void 0 ? _object_rootDocId : "";
+        return message;
+    }
+};
+function createBaseMsgUpdateSidDocumentResponse() {
+    return {
+        docId: ""
+    };
+}
+export var MsgUpdateSidDocumentResponse = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.docId !== "") {
+            writer.uint32(10).string(message.docId);
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseMsgUpdateSidDocumentResponse();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.docId = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            docId: isSet(object.docId) ? String(object.docId) : ""
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.docId !== undefined && (obj.docId = message.docId);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseMsgUpdateSidDocumentResponse();
+        var _object_docId;
+        message.docId = (_object_docId = object.docId) !== null && _object_docId !== void 0 ? _object_docId : "";
+        return message;
+    }
+};
 export var MsgClientImpl = /*#__PURE__*/ function() {
     "use strict";
     function MsgClientImpl(rpc) {
@@ -486,6 +613,7 @@ export var MsgClientImpl = /*#__PURE__*/ function() {
         this.Unbinding = this.Unbinding.bind(this);
         this.AddAccountAuth = this.AddAccountAuth.bind(this);
         this.UpdateAccountAuths = this.UpdateAccountAuths.bind(this);
+        this.UpdateSidDocument = this.UpdateSidDocument.bind(this);
     }
     var _proto = MsgClientImpl.prototype;
     _proto.AddBinding = function AddBinding(request) {
@@ -514,6 +642,13 @@ export var MsgClientImpl = /*#__PURE__*/ function() {
         var promise = this.rpc.request("saonetwork.sao.did.Msg", "UpdateAccountAuths", data);
         return promise.then(function(data) {
             return MsgUpdateAccountAuthsResponse.decode(new _m0.Reader(data));
+        });
+    };
+    _proto.UpdateSidDocument = function UpdateSidDocument(request) {
+        var data = MsgUpdateSidDocument.encode(request).finish();
+        var promise = this.rpc.request("saonetwork.sao.did.Msg", "UpdateSidDocument", data);
+        return promise.then(function(data) {
+            return MsgUpdateSidDocumentResponse.decode(new _m0.Reader(data));
         });
     };
     return MsgClientImpl;

@@ -7,19 +7,14 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgAddAccountAuth } from "./types/sao/did/tx";
 import { MsgAddBinding } from "./types/sao/did/tx";
 import { MsgUpdateAccountAuths } from "./types/sao/did/tx";
 import { MsgUnbinding } from "./types/sao/did/tx";
+import { MsgAddAccountAuth } from "./types/sao/did/tx";
+import { MsgUpdateSidDocument } from "./types/sao/did/tx";
 
 
-export { MsgAddAccountAuth, MsgAddBinding, MsgUpdateAccountAuths, MsgUnbinding };
-
-type sendMsgAddAccountAuthParams = {
-  value: MsgAddAccountAuth,
-  fee?: StdFee,
-  memo?: string
-};
+export { MsgAddBinding, MsgUpdateAccountAuths, MsgUnbinding, MsgAddAccountAuth, MsgUpdateSidDocument };
 
 type sendMsgAddBindingParams = {
   value: MsgAddBinding,
@@ -39,10 +34,18 @@ type sendMsgUnbindingParams = {
   memo?: string
 };
 
-
-type msgAddAccountAuthParams = {
+type sendMsgAddAccountAuthParams = {
   value: MsgAddAccountAuth,
+  fee?: StdFee,
+  memo?: string
 };
+
+type sendMsgUpdateSidDocumentParams = {
+  value: MsgUpdateSidDocument,
+  fee?: StdFee,
+  memo?: string
+};
+
 
 type msgAddBindingParams = {
   value: MsgAddBinding,
@@ -54,6 +57,14 @@ type msgUpdateAccountAuthsParams = {
 
 type msgUnbindingParams = {
   value: MsgUnbinding,
+};
+
+type msgAddAccountAuthParams = {
+  value: MsgAddAccountAuth,
+};
+
+type msgUpdateSidDocumentParams = {
+  value: MsgUpdateSidDocument,
 };
 
 
@@ -73,20 +84,6 @@ interface TxClientOptions {
 export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "http://localhost:26657", prefix: "cosmos" }) => {
 
   return {
-		
-		async sendMsgAddAccountAuth({ value, fee, memo }: sendMsgAddAccountAuthParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgAddAccountAuth: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgAddAccountAuth({ value: MsgAddAccountAuth.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgAddAccountAuth: Could not broadcast Tx: '+ e.message)
-			}
-		},
 		
 		async sendMsgAddBinding({ value, fee, memo }: sendMsgAddBindingParams): Promise<DeliverTxResponse> {
 			if (!signer) {
@@ -130,14 +127,34 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		
-		msgAddAccountAuth({ value }: msgAddAccountAuthParams): EncodeObject {
-			try {
-				return { typeUrl: "/saonetwork.sao.did.MsgAddAccountAuth", value: MsgAddAccountAuth.fromPartial( value ) }  
+		async sendMsgAddAccountAuth({ value, fee, memo }: sendMsgAddAccountAuthParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgAddAccountAuth: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgAddAccountAuth({ value: MsgAddAccountAuth.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgAddAccountAuth: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgAddAccountAuth: Could not broadcast Tx: '+ e.message)
 			}
 		},
+		
+		async sendMsgUpdateSidDocument({ value, fee, memo }: sendMsgUpdateSidDocumentParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateSidDocument: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgUpdateSidDocument({ value: MsgUpdateSidDocument.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgUpdateSidDocument: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		
 		msgAddBinding({ value }: msgAddBindingParams): EncodeObject {
 			try {
@@ -160,6 +177,22 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return { typeUrl: "/saonetwork.sao.did.MsgUnbinding", value: MsgUnbinding.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgUnbinding: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgAddAccountAuth({ value }: msgAddAccountAuthParams): EncodeObject {
+			try {
+				return { typeUrl: "/saonetwork.sao.did.MsgAddAccountAuth", value: MsgAddAccountAuth.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgAddAccountAuth: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUpdateSidDocument({ value }: msgUpdateSidDocumentParams): EncodeObject {
+			try {
+				return { typeUrl: "/saonetwork.sao.did.MsgUpdateSidDocument", value: MsgUpdateSidDocument.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateSidDocument: Could not create message: ' + e.message)
 			}
 		},
 		

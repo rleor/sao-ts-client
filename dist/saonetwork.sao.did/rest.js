@@ -522,6 +522,68 @@ export var HttpClient = /*#__PURE__*/ function() {
                 format: "json"
             }, params));
         };
+        /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySidDocumentAll
+   * @summary Queries a list of SidDocument items.
+   * @request GET:/SaoNetwork/sao/did/sid_document
+   */ _this.querySidDocumentAll = function(query) {
+            var params = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
+            return _this.request(_objectSpread({
+                path: "/SaoNetwork/sao/did/sid_document",
+                method: "GET",
+                query: query,
+                format: "json"
+            }, params));
+        };
+        /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySidDocument
+   * @summary Queries a SidDocument by index.
+   * @request GET:/SaoNetwork/sao/did/sid_document/{versionId}
+   */ _this.querySidDocument = function(versionId) {
+            var params = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
+            return _this.request(_objectSpread({
+                path: "/SaoNetwork/sao/did/sid_document/".concat(versionId),
+                method: "GET",
+                format: "json"
+            }, params));
+        };
+        /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySidDocumentVersionAll
+   * @summary Queries a list of SidDocumentVersion items.
+   * @request GET:/SaoNetwork/sao/did/sid_document_version
+   */ _this.querySidDocumentVersionAll = function(query) {
+            var params = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
+            return _this.request(_objectSpread({
+                path: "/SaoNetwork/sao/did/sid_document_version",
+                method: "GET",
+                query: query,
+                format: "json"
+            }, params));
+        };
+        /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySidDocumentVersion
+   * @summary Queries a SidDocumentVersion by index.
+   * @request GET:/SaoNetwork/sao/did/sid_document_version/{docId}
+   */ _this.querySidDocumentVersion = function(docId) {
+            var params = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
+            return _this.request(_objectSpread({
+                path: "/SaoNetwork/sao/did/sid_document_version/".concat(docId),
+                method: "GET",
+                format: "json"
+            }, params));
+        };
         return _this;
     }
     return Api;
