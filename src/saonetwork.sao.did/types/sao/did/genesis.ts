@@ -4,6 +4,7 @@ import { AccountAuth } from "./account_auth";
 import { AccountList } from "./account_list";
 import { DidBindingProofs } from "./did_binding_proofs";
 import { Params } from "./params";
+import { PastSeeds } from "./past_seeds";
 import { SidDocument } from "./sid_document";
 import { SidDocumentVersion } from "./sid_document_version";
 
@@ -16,8 +17,9 @@ export interface GenesisState {
   accountListList: AccountList[];
   accountAuthList: AccountAuth[];
   sidDocumentList: SidDocument[];
-  /** this line is used by starport scaffolding # genesis/proto/state */
   sidDocumentVersionList: SidDocumentVersion[];
+  /** this line is used by starport scaffolding # genesis/proto/state */
+  pastSeedsList: PastSeeds[];
 }
 
 function createBaseGenesisState(): GenesisState {
@@ -28,6 +30,7 @@ function createBaseGenesisState(): GenesisState {
     accountAuthList: [],
     sidDocumentList: [],
     sidDocumentVersionList: [],
+    pastSeedsList: [],
   };
 }
 
@@ -50,6 +53,9 @@ export const GenesisState = {
     }
     for (const v of message.sidDocumentVersionList) {
       SidDocumentVersion.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    for (const v of message.pastSeedsList) {
+      PastSeeds.encode(v!, writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
@@ -79,6 +85,9 @@ export const GenesisState = {
         case 6:
           message.sidDocumentVersionList.push(SidDocumentVersion.decode(reader, reader.uint32()));
           break;
+        case 7:
+          message.pastSeedsList.push(PastSeeds.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -104,6 +113,9 @@ export const GenesisState = {
         : [],
       sidDocumentVersionList: Array.isArray(object?.sidDocumentVersionList)
         ? object.sidDocumentVersionList.map((e: any) => SidDocumentVersion.fromJSON(e))
+        : [],
+      pastSeedsList: Array.isArray(object?.pastSeedsList)
+        ? object.pastSeedsList.map((e: any) => PastSeeds.fromJSON(e))
         : [],
     };
   },
@@ -138,6 +150,11 @@ export const GenesisState = {
     } else {
       obj.sidDocumentVersionList = [];
     }
+    if (message.pastSeedsList) {
+      obj.pastSeedsList = message.pastSeedsList.map((e) => e ? PastSeeds.toJSON(e) : undefined);
+    } else {
+      obj.pastSeedsList = [];
+    }
     return obj;
   },
 
@@ -151,6 +168,7 @@ export const GenesisState = {
     message.accountAuthList = object.accountAuthList?.map((e) => AccountAuth.fromPartial(e)) || [];
     message.sidDocumentList = object.sidDocumentList?.map((e) => SidDocument.fromPartial(e)) || [];
     message.sidDocumentVersionList = object.sidDocumentVersionList?.map((e) => SidDocumentVersion.fromPartial(e)) || [];
+    message.pastSeedsList = object.pastSeedsList?.map((e) => PastSeeds.fromPartial(e)) || [];
     return message;
   },
 };

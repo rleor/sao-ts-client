@@ -5,6 +5,7 @@ import { AccountAuth } from "./account_auth";
 import { AccountList } from "./account_list";
 import { DidBindingProofs } from "./did_binding_proofs";
 import { Params } from "./params";
+import { PastSeeds } from "./past_seeds";
 import { SidDocument } from "./sid_document";
 import { SidDocumentVersion } from "./sid_document_version";
 
@@ -110,6 +111,23 @@ export interface QueryAllSidDocumentVersionRequest {
 
 export interface QueryAllSidDocumentVersionResponse {
   sidDocumentVersion: SidDocumentVersion[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryGetPastSeedsRequest {
+  did: string;
+}
+
+export interface QueryGetPastSeedsResponse {
+  pastSeeds: PastSeeds | undefined;
+}
+
+export interface QueryAllPastSeedsRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryAllPastSeedsResponse {
+  pastSeeds: PastSeeds[];
   pagination: PageResponse | undefined;
 }
 
@@ -1401,6 +1419,218 @@ export const QueryAllSidDocumentVersionResponse = {
   },
 };
 
+function createBaseQueryGetPastSeedsRequest(): QueryGetPastSeedsRequest {
+  return { did: "" };
+}
+
+export const QueryGetPastSeedsRequest = {
+  encode(message: QueryGetPastSeedsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.did !== "") {
+      writer.uint32(10).string(message.did);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPastSeedsRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetPastSeedsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.did = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetPastSeedsRequest {
+    return { did: isSet(object.did) ? String(object.did) : "" };
+  },
+
+  toJSON(message: QueryGetPastSeedsRequest): unknown {
+    const obj: any = {};
+    message.did !== undefined && (obj.did = message.did);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetPastSeedsRequest>, I>>(object: I): QueryGetPastSeedsRequest {
+    const message = createBaseQueryGetPastSeedsRequest();
+    message.did = object.did ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetPastSeedsResponse(): QueryGetPastSeedsResponse {
+  return { pastSeeds: undefined };
+}
+
+export const QueryGetPastSeedsResponse = {
+  encode(message: QueryGetPastSeedsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pastSeeds !== undefined) {
+      PastSeeds.encode(message.pastSeeds, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPastSeedsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetPastSeedsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pastSeeds = PastSeeds.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetPastSeedsResponse {
+    return { pastSeeds: isSet(object.pastSeeds) ? PastSeeds.fromJSON(object.pastSeeds) : undefined };
+  },
+
+  toJSON(message: QueryGetPastSeedsResponse): unknown {
+    const obj: any = {};
+    message.pastSeeds !== undefined
+      && (obj.pastSeeds = message.pastSeeds ? PastSeeds.toJSON(message.pastSeeds) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetPastSeedsResponse>, I>>(object: I): QueryGetPastSeedsResponse {
+    const message = createBaseQueryGetPastSeedsResponse();
+    message.pastSeeds = (object.pastSeeds !== undefined && object.pastSeeds !== null)
+      ? PastSeeds.fromPartial(object.pastSeeds)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllPastSeedsRequest(): QueryAllPastSeedsRequest {
+  return { pagination: undefined };
+}
+
+export const QueryAllPastSeedsRequest = {
+  encode(message: QueryAllPastSeedsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPastSeedsRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllPastSeedsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllPastSeedsRequest {
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
+  },
+
+  toJSON(message: QueryAllPastSeedsRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined
+      && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAllPastSeedsRequest>, I>>(object: I): QueryAllPastSeedsRequest {
+    const message = createBaseQueryAllPastSeedsRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllPastSeedsResponse(): QueryAllPastSeedsResponse {
+  return { pastSeeds: [], pagination: undefined };
+}
+
+export const QueryAllPastSeedsResponse = {
+  encode(message: QueryAllPastSeedsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.pastSeeds) {
+      PastSeeds.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPastSeedsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllPastSeedsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pastSeeds.push(PastSeeds.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllPastSeedsResponse {
+    return {
+      pastSeeds: Array.isArray(object?.pastSeeds) ? object.pastSeeds.map((e: any) => PastSeeds.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
+  },
+
+  toJSON(message: QueryAllPastSeedsResponse): unknown {
+    const obj: any = {};
+    if (message.pastSeeds) {
+      obj.pastSeeds = message.pastSeeds.map((e) => e ? PastSeeds.toJSON(e) : undefined);
+    } else {
+      obj.pastSeeds = [];
+    }
+    message.pagination !== undefined
+      && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAllPastSeedsResponse>, I>>(object: I): QueryAllPastSeedsResponse {
+    const message = createBaseQueryAllPastSeedsResponse();
+    message.pastSeeds = object.pastSeeds?.map((e) => PastSeeds.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -1427,6 +1657,10 @@ export interface Query {
   SidDocumentVersion(request: QueryGetSidDocumentVersionRequest): Promise<QueryGetSidDocumentVersionResponse>;
   /** Queries a list of SidDocumentVersion items. */
   SidDocumentVersionAll(request: QueryAllSidDocumentVersionRequest): Promise<QueryAllSidDocumentVersionResponse>;
+  /** Queries a PastSeeds by index. */
+  PastSeeds(request: QueryGetPastSeedsRequest): Promise<QueryGetPastSeedsResponse>;
+  /** Queries a list of PastSeeds items. */
+  PastSeedsAll(request: QueryAllPastSeedsRequest): Promise<QueryAllPastSeedsResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -1445,6 +1679,8 @@ export class QueryClientImpl implements Query {
     this.SidDocumentAll = this.SidDocumentAll.bind(this);
     this.SidDocumentVersion = this.SidDocumentVersion.bind(this);
     this.SidDocumentVersionAll = this.SidDocumentVersionAll.bind(this);
+    this.PastSeeds = this.PastSeeds.bind(this);
+    this.PastSeedsAll = this.PastSeedsAll.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -1516,6 +1752,18 @@ export class QueryClientImpl implements Query {
     const data = QueryAllSidDocumentVersionRequest.encode(request).finish();
     const promise = this.rpc.request("saonetwork.sao.did.Query", "SidDocumentVersionAll", data);
     return promise.then((data) => QueryAllSidDocumentVersionResponse.decode(new _m0.Reader(data)));
+  }
+
+  PastSeeds(request: QueryGetPastSeedsRequest): Promise<QueryGetPastSeedsResponse> {
+    const data = QueryGetPastSeedsRequest.encode(request).finish();
+    const promise = this.rpc.request("saonetwork.sao.did.Query", "PastSeeds", data);
+    return promise.then((data) => QueryGetPastSeedsResponse.decode(new _m0.Reader(data)));
+  }
+
+  PastSeedsAll(request: QueryAllPastSeedsRequest): Promise<QueryAllPastSeedsResponse> {
+    const data = QueryAllPastSeedsRequest.encode(request).finish();
+    const promise = this.rpc.request("saonetwork.sao.did.Query", "PastSeedsAll", data);
+    return promise.then((data) => QueryAllPastSeedsResponse.decode(new _m0.Reader(data)));
   }
 }
 

@@ -10,6 +10,7 @@ import { AccountAuth } from "./account_auth";
 import { AccountList } from "./account_list";
 import { DidBindingProofs } from "./did_binding_proofs";
 import { Params } from "./params";
+import { PastSeeds } from "./past_seeds";
 import { SidDocument } from "./sid_document";
 import { SidDocumentVersion } from "./sid_document_version";
 export var protobufPackage = "saonetwork.sao.did";
@@ -20,7 +21,8 @@ function createBaseGenesisState() {
         accountListList: [],
         accountAuthList: [],
         sidDocumentList: [],
-        sidDocumentVersionList: []
+        sidDocumentVersionList: [],
+        pastSeedsList: []
     };
 }
 export var GenesisState = {
@@ -129,6 +131,26 @@ export var GenesisState = {
                 }
             }
         }
+        var _iteratorNormalCompletion5 = true, _didIteratorError5 = false, _iteratorError5 = undefined;
+        try {
+            for(var _iterator5 = message.pastSeedsList[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true){
+                var v5 = _step5.value;
+                PastSeeds.encode(v5, writer.uint32(58).fork()).ldelim();
+            }
+        } catch (err) {
+            _didIteratorError5 = true;
+            _iteratorError5 = err;
+        } finally{
+            try {
+                if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
+                    _iterator5.return();
+                }
+            } finally{
+                if (_didIteratorError5) {
+                    throw _iteratorError5;
+                }
+            }
+        }
         return writer;
     },
     decode: function decode(input, length) {
@@ -156,6 +178,9 @@ export var GenesisState = {
                 case 6:
                     message.sidDocumentVersionList.push(SidDocumentVersion.decode(reader, reader.uint32()));
                     break;
+                case 7:
+                    message.pastSeedsList.push(PastSeeds.decode(reader, reader.uint32()));
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -180,6 +205,9 @@ export var GenesisState = {
             }) : [],
             sidDocumentVersionList: Array.isArray(object === null || object === void 0 ? void 0 : object.sidDocumentVersionList) ? object.sidDocumentVersionList.map(function(e) {
                 return SidDocumentVersion.fromJSON(e);
+            }) : [],
+            pastSeedsList: Array.isArray(object === null || object === void 0 ? void 0 : object.pastSeedsList) ? object.pastSeedsList.map(function(e) {
+                return PastSeeds.fromJSON(e);
             }) : []
         };
     },
@@ -221,10 +249,17 @@ export var GenesisState = {
         } else {
             obj.sidDocumentVersionList = [];
         }
+        if (message.pastSeedsList) {
+            obj.pastSeedsList = message.pastSeedsList.map(function(e) {
+                return e ? PastSeeds.toJSON(e) : undefined;
+            });
+        } else {
+            obj.pastSeedsList = [];
+        }
         return obj;
     },
     fromPartial: function fromPartial(object) {
-        var _object_didBindingProofsList, _object_accountListList, _object_accountAuthList, _object_sidDocumentList, _object_sidDocumentVersionList;
+        var _object_didBindingProofsList, _object_accountListList, _object_accountAuthList, _object_sidDocumentList, _object_sidDocumentVersionList, _object_pastSeedsList;
         var message = createBaseGenesisState();
         message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
         message.didBindingProofsList = ((_object_didBindingProofsList = object.didBindingProofsList) === null || _object_didBindingProofsList === void 0 ? void 0 : _object_didBindingProofsList.map(function(e) {
@@ -241,6 +276,9 @@ export var GenesisState = {
         })) || [];
         message.sidDocumentVersionList = ((_object_sidDocumentVersionList = object.sidDocumentVersionList) === null || _object_sidDocumentVersionList === void 0 ? void 0 : _object_sidDocumentVersionList.map(function(e) {
             return SidDocumentVersion.fromPartial(e);
+        })) || [];
+        message.pastSeedsList = ((_object_pastSeedsList = object.pastSeedsList) === null || _object_pastSeedsList === void 0 ? void 0 : _object_pastSeedsList.map(function(e) {
+            return PastSeeds.fromPartial(e);
         })) || [];
         return message;
     }

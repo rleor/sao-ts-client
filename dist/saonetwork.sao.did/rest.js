@@ -526,6 +526,37 @@ export var HttpClient = /*#__PURE__*/ function() {
    * No description
    *
    * @tags Query
+   * @name QueryPastSeedsAll
+   * @summary Queries a list of PastSeeds items.
+   * @request GET:/SaoNetwork/sao/did/past_seeds
+   */ _this.queryPastSeedsAll = function(query) {
+            var params = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
+            return _this.request(_objectSpread({
+                path: "/SaoNetwork/sao/did/past_seeds",
+                method: "GET",
+                query: query,
+                format: "json"
+            }, params));
+        };
+        /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryPastSeeds
+   * @summary Queries a PastSeeds by index.
+   * @request GET:/SaoNetwork/sao/did/past_seeds/{did}
+   */ _this.queryPastSeeds = function(did) {
+            var params = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
+            return _this.request(_objectSpread({
+                path: "/SaoNetwork/sao/did/past_seeds/".concat(did),
+                method: "GET",
+                format: "json"
+            }, params));
+        };
+        /**
+   * No description
+   *
+   * @tags Query
    * @name QuerySidDocumentAll
    * @summary Queries a list of SidDocument items.
    * @request GET:/SaoNetwork/sao/did/sid_document

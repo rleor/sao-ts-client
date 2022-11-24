@@ -16,6 +16,7 @@ import { AccountAuth } from "./account_auth";
 import { AccountList } from "./account_list";
 import { DidBindingProofs } from "./did_binding_proofs";
 import { Params } from "./params";
+import { PastSeeds } from "./past_seeds";
 import { SidDocument } from "./sid_document";
 import { SidDocumentVersion } from "./sid_document_version";
 export var protobufPackage = "saonetwork.sao.did";
@@ -1335,6 +1336,229 @@ export var QueryAllSidDocumentVersionResponse = {
         return message;
     }
 };
+function createBaseQueryGetPastSeedsRequest() {
+    return {
+        did: ""
+    };
+}
+export var QueryGetPastSeedsRequest = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.did !== "") {
+            writer.uint32(10).string(message.did);
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseQueryGetPastSeedsRequest();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.did = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            did: isSet(object.did) ? String(object.did) : ""
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.did !== undefined && (obj.did = message.did);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseQueryGetPastSeedsRequest();
+        var _object_did;
+        message.did = (_object_did = object.did) !== null && _object_did !== void 0 ? _object_did : "";
+        return message;
+    }
+};
+function createBaseQueryGetPastSeedsResponse() {
+    return {
+        pastSeeds: undefined
+    };
+}
+export var QueryGetPastSeedsResponse = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.pastSeeds !== undefined) {
+            PastSeeds.encode(message.pastSeeds, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseQueryGetPastSeedsResponse();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.pastSeeds = PastSeeds.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            pastSeeds: isSet(object.pastSeeds) ? PastSeeds.fromJSON(object.pastSeeds) : undefined
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.pastSeeds !== undefined && (obj.pastSeeds = message.pastSeeds ? PastSeeds.toJSON(message.pastSeeds) : undefined);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseQueryGetPastSeedsResponse();
+        message.pastSeeds = object.pastSeeds !== undefined && object.pastSeeds !== null ? PastSeeds.fromPartial(object.pastSeeds) : undefined;
+        return message;
+    }
+};
+function createBaseQueryAllPastSeedsRequest() {
+    return {
+        pagination: undefined
+    };
+}
+export var QueryAllPastSeedsRequest = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.pagination !== undefined) {
+            PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseQueryAllPastSeedsRequest();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.pagination = PageRequest.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseQueryAllPastSeedsRequest();
+        message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+        return message;
+    }
+};
+function createBaseQueryAllPastSeedsResponse() {
+    return {
+        pastSeeds: [],
+        pagination: undefined
+    };
+}
+export var QueryAllPastSeedsResponse = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
+        try {
+            for(var _iterator = message.pastSeeds[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true){
+                var v = _step.value;
+                PastSeeds.encode(v, writer.uint32(10).fork()).ldelim();
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally{
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return != null) {
+                    _iterator.return();
+                }
+            } finally{
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
+        }
+        if (message.pagination !== undefined) {
+            PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseQueryAllPastSeedsResponse();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.pastSeeds.push(PastSeeds.decode(reader, reader.uint32()));
+                    break;
+                case 2:
+                    message.pagination = PageResponse.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            pastSeeds: Array.isArray(object === null || object === void 0 ? void 0 : object.pastSeeds) ? object.pastSeeds.map(function(e) {
+                return PastSeeds.fromJSON(e);
+            }) : [],
+            pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        if (message.pastSeeds) {
+            obj.pastSeeds = message.pastSeeds.map(function(e) {
+                return e ? PastSeeds.toJSON(e) : undefined;
+            });
+        } else {
+            obj.pastSeeds = [];
+        }
+        message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var _object_pastSeeds;
+        var message = createBaseQueryAllPastSeedsResponse();
+        message.pastSeeds = ((_object_pastSeeds = object.pastSeeds) === null || _object_pastSeeds === void 0 ? void 0 : _object_pastSeeds.map(function(e) {
+            return PastSeeds.fromPartial(e);
+        })) || [];
+        message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+        return message;
+    }
+};
 export var QueryClientImpl = /*#__PURE__*/ function() {
     "use strict";
     function QueryClientImpl(rpc) {
@@ -1352,6 +1576,8 @@ export var QueryClientImpl = /*#__PURE__*/ function() {
         this.SidDocumentAll = this.SidDocumentAll.bind(this);
         this.SidDocumentVersion = this.SidDocumentVersion.bind(this);
         this.SidDocumentVersionAll = this.SidDocumentVersionAll.bind(this);
+        this.PastSeeds = this.PastSeeds.bind(this);
+        this.PastSeedsAll = this.PastSeedsAll.bind(this);
     }
     var _proto = QueryClientImpl.prototype;
     _proto.Params = function Params(request) {
@@ -1436,6 +1662,20 @@ export var QueryClientImpl = /*#__PURE__*/ function() {
         var promise = this.rpc.request("saonetwork.sao.did.Query", "SidDocumentVersionAll", data);
         return promise.then(function(data) {
             return QueryAllSidDocumentVersionResponse.decode(new _m0.Reader(data));
+        });
+    };
+    _proto.PastSeeds = function PastSeeds(request) {
+        var data = QueryGetPastSeedsRequest.encode(request).finish();
+        var promise = this.rpc.request("saonetwork.sao.did.Query", "PastSeeds", data);
+        return promise.then(function(data) {
+            return QueryGetPastSeedsResponse.decode(new _m0.Reader(data));
+        });
+    };
+    _proto.PastSeedsAll = function PastSeedsAll(request) {
+        var data = QueryAllPastSeedsRequest.encode(request).finish();
+        var promise = this.rpc.request("saonetwork.sao.did.Query", "PastSeedsAll", data);
+        return promise.then(function(data) {
+            return QueryAllPastSeedsResponse.decode(new _m0.Reader(data));
         });
     };
     return QueryClientImpl;

@@ -132,12 +132,13 @@ import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry } from "@cosmjs/proto-signing";
 import { msgTypes } from "./registry";
 import { Api } from "./rest";
-import { MsgAddBinding } from "./types/sao/did/tx";
-import { MsgUpdateAccountAuths } from "./types/sao/did/tx";
-import { MsgUnbinding } from "./types/sao/did/tx";
 import { MsgAddAccountAuth } from "./types/sao/did/tx";
+import { MsgAddBinding } from "./types/sao/did/tx";
 import { MsgUpdateSidDocument } from "./types/sao/did/tx";
-export { MsgAddBinding, MsgUpdateAccountAuths, MsgUnbinding, MsgAddAccountAuth, MsgUpdateSidDocument };
+import { MsgUnbinding } from "./types/sao/did/tx";
+import { MsgAddPastSeed } from "./types/sao/did/tx";
+import { MsgUpdateAccountAuths } from "./types/sao/did/tx";
+export { MsgAddAccountAuth, MsgAddBinding, MsgUpdateSidDocument, MsgUnbinding, MsgAddPastSeed, MsgUpdateAccountAuths };
 export var registry = new Registry(msgTypes);
 var defaultFee = {
     amount: [],
@@ -149,180 +150,6 @@ export var txClient = function() {
         prefix: "cosmos"
     }, signer = _ref.signer, prefix = _ref.prefix, addr = _ref.addr;
     return {
-        sendMsgAddBinding: function sendMsgAddBinding(param) {
-            var value = param.value, fee = param.fee, memo = param.memo;
-            return _asyncToGenerator(function() {
-                var address, signingClient, msg, e;
-                return __generator(this, function(_state) {
-                    switch(_state.label){
-                        case 0:
-                            if (!signer) {
-                                throw new Error("TxClient:sendMsgAddBinding: Unable to sign Tx. Signer is not present.");
-                            }
-                            _state.label = 1;
-                        case 1:
-                            _state.trys.push([
-                                1,
-                                5,
-                                ,
-                                6
-                            ]);
-                            return [
-                                4,
-                                signer.getAccounts()
-                            ];
-                        case 2:
-                            address = _state.sent()[0].address;
-                            return [
-                                4,
-                                SigningStargateClient.connectWithSigner(addr, signer, {
-                                    registry: registry,
-                                    prefix: prefix
-                                })
-                            ];
-                        case 3:
-                            signingClient = _state.sent();
-                            msg = this.msgAddBinding({
-                                value: MsgAddBinding.fromPartial(value)
-                            });
-                            return [
-                                4,
-                                signingClient.signAndBroadcast(address, [
-                                    msg
-                                ], fee ? fee : defaultFee, memo)
-                            ];
-                        case 4:
-                            return [
-                                2,
-                                _state.sent()
-                            ];
-                        case 5:
-                            e = _state.sent();
-                            throw new Error("TxClient:sendMsgAddBinding: Could not broadcast Tx: " + e.message);
-                        case 6:
-                            return [
-                                2
-                            ];
-                    }
-                });
-            }).apply(this);
-        },
-        sendMsgUpdateAccountAuths: function sendMsgUpdateAccountAuths(param) {
-            var value = param.value, fee = param.fee, memo = param.memo;
-            return _asyncToGenerator(function() {
-                var address, signingClient, msg, e;
-                return __generator(this, function(_state) {
-                    switch(_state.label){
-                        case 0:
-                            if (!signer) {
-                                throw new Error("TxClient:sendMsgUpdateAccountAuths: Unable to sign Tx. Signer is not present.");
-                            }
-                            _state.label = 1;
-                        case 1:
-                            _state.trys.push([
-                                1,
-                                5,
-                                ,
-                                6
-                            ]);
-                            return [
-                                4,
-                                signer.getAccounts()
-                            ];
-                        case 2:
-                            address = _state.sent()[0].address;
-                            return [
-                                4,
-                                SigningStargateClient.connectWithSigner(addr, signer, {
-                                    registry: registry,
-                                    prefix: prefix
-                                })
-                            ];
-                        case 3:
-                            signingClient = _state.sent();
-                            msg = this.msgUpdateAccountAuths({
-                                value: MsgUpdateAccountAuths.fromPartial(value)
-                            });
-                            return [
-                                4,
-                                signingClient.signAndBroadcast(address, [
-                                    msg
-                                ], fee ? fee : defaultFee, memo)
-                            ];
-                        case 4:
-                            return [
-                                2,
-                                _state.sent()
-                            ];
-                        case 5:
-                            e = _state.sent();
-                            throw new Error("TxClient:sendMsgUpdateAccountAuths: Could not broadcast Tx: " + e.message);
-                        case 6:
-                            return [
-                                2
-                            ];
-                    }
-                });
-            }).apply(this);
-        },
-        sendMsgUnbinding: function sendMsgUnbinding(param) {
-            var value = param.value, fee = param.fee, memo = param.memo;
-            return _asyncToGenerator(function() {
-                var address, signingClient, msg, e;
-                return __generator(this, function(_state) {
-                    switch(_state.label){
-                        case 0:
-                            if (!signer) {
-                                throw new Error("TxClient:sendMsgUnbinding: Unable to sign Tx. Signer is not present.");
-                            }
-                            _state.label = 1;
-                        case 1:
-                            _state.trys.push([
-                                1,
-                                5,
-                                ,
-                                6
-                            ]);
-                            return [
-                                4,
-                                signer.getAccounts()
-                            ];
-                        case 2:
-                            address = _state.sent()[0].address;
-                            return [
-                                4,
-                                SigningStargateClient.connectWithSigner(addr, signer, {
-                                    registry: registry,
-                                    prefix: prefix
-                                })
-                            ];
-                        case 3:
-                            signingClient = _state.sent();
-                            msg = this.msgUnbinding({
-                                value: MsgUnbinding.fromPartial(value)
-                            });
-                            return [
-                                4,
-                                signingClient.signAndBroadcast(address, [
-                                    msg
-                                ], fee ? fee : defaultFee, memo)
-                            ];
-                        case 4:
-                            return [
-                                2,
-                                _state.sent()
-                            ];
-                        case 5:
-                            e = _state.sent();
-                            throw new Error("TxClient:sendMsgUnbinding: Could not broadcast Tx: " + e.message);
-                        case 6:
-                            return [
-                                2
-                            ];
-                    }
-                });
-            }).apply(this);
-        },
         sendMsgAddAccountAuth: function sendMsgAddAccountAuth(param) {
             var value = param.value, fee = param.fee, memo = param.memo;
             return _asyncToGenerator(function() {
@@ -373,6 +200,64 @@ export var txClient = function() {
                         case 5:
                             e = _state.sent();
                             throw new Error("TxClient:sendMsgAddAccountAuth: Could not broadcast Tx: " + e.message);
+                        case 6:
+                            return [
+                                2
+                            ];
+                    }
+                });
+            }).apply(this);
+        },
+        sendMsgAddBinding: function sendMsgAddBinding(param) {
+            var value = param.value, fee = param.fee, memo = param.memo;
+            return _asyncToGenerator(function() {
+                var address, signingClient, msg, e;
+                return __generator(this, function(_state) {
+                    switch(_state.label){
+                        case 0:
+                            if (!signer) {
+                                throw new Error("TxClient:sendMsgAddBinding: Unable to sign Tx. Signer is not present.");
+                            }
+                            _state.label = 1;
+                        case 1:
+                            _state.trys.push([
+                                1,
+                                5,
+                                ,
+                                6
+                            ]);
+                            return [
+                                4,
+                                signer.getAccounts()
+                            ];
+                        case 2:
+                            address = _state.sent()[0].address;
+                            return [
+                                4,
+                                SigningStargateClient.connectWithSigner(addr, signer, {
+                                    registry: registry,
+                                    prefix: prefix
+                                })
+                            ];
+                        case 3:
+                            signingClient = _state.sent();
+                            msg = this.msgAddBinding({
+                                value: MsgAddBinding.fromPartial(value)
+                            });
+                            return [
+                                4,
+                                signingClient.signAndBroadcast(address, [
+                                    msg
+                                ], fee ? fee : defaultFee, memo)
+                            ];
+                        case 4:
+                            return [
+                                2,
+                                _state.sent()
+                            ];
+                        case 5:
+                            e = _state.sent();
+                            throw new Error("TxClient:sendMsgAddBinding: Could not broadcast Tx: " + e.message);
                         case 6:
                             return [
                                 2
@@ -439,6 +324,191 @@ export var txClient = function() {
                 });
             }).apply(this);
         },
+        sendMsgUnbinding: function sendMsgUnbinding(param) {
+            var value = param.value, fee = param.fee, memo = param.memo;
+            return _asyncToGenerator(function() {
+                var address, signingClient, msg, e;
+                return __generator(this, function(_state) {
+                    switch(_state.label){
+                        case 0:
+                            if (!signer) {
+                                throw new Error("TxClient:sendMsgUnbinding: Unable to sign Tx. Signer is not present.");
+                            }
+                            _state.label = 1;
+                        case 1:
+                            _state.trys.push([
+                                1,
+                                5,
+                                ,
+                                6
+                            ]);
+                            return [
+                                4,
+                                signer.getAccounts()
+                            ];
+                        case 2:
+                            address = _state.sent()[0].address;
+                            return [
+                                4,
+                                SigningStargateClient.connectWithSigner(addr, signer, {
+                                    registry: registry,
+                                    prefix: prefix
+                                })
+                            ];
+                        case 3:
+                            signingClient = _state.sent();
+                            msg = this.msgUnbinding({
+                                value: MsgUnbinding.fromPartial(value)
+                            });
+                            return [
+                                4,
+                                signingClient.signAndBroadcast(address, [
+                                    msg
+                                ], fee ? fee : defaultFee, memo)
+                            ];
+                        case 4:
+                            return [
+                                2,
+                                _state.sent()
+                            ];
+                        case 5:
+                            e = _state.sent();
+                            throw new Error("TxClient:sendMsgUnbinding: Could not broadcast Tx: " + e.message);
+                        case 6:
+                            return [
+                                2
+                            ];
+                    }
+                });
+            }).apply(this);
+        },
+        sendMsgAddPastSeed: function sendMsgAddPastSeed(param) {
+            var value = param.value, fee = param.fee, memo = param.memo;
+            return _asyncToGenerator(function() {
+                var address, signingClient, msg, e;
+                return __generator(this, function(_state) {
+                    switch(_state.label){
+                        case 0:
+                            if (!signer) {
+                                throw new Error("TxClient:sendMsgAddPastSeed: Unable to sign Tx. Signer is not present.");
+                            }
+                            _state.label = 1;
+                        case 1:
+                            _state.trys.push([
+                                1,
+                                5,
+                                ,
+                                6
+                            ]);
+                            return [
+                                4,
+                                signer.getAccounts()
+                            ];
+                        case 2:
+                            address = _state.sent()[0].address;
+                            return [
+                                4,
+                                SigningStargateClient.connectWithSigner(addr, signer, {
+                                    registry: registry,
+                                    prefix: prefix
+                                })
+                            ];
+                        case 3:
+                            signingClient = _state.sent();
+                            msg = this.msgAddPastSeed({
+                                value: MsgAddPastSeed.fromPartial(value)
+                            });
+                            return [
+                                4,
+                                signingClient.signAndBroadcast(address, [
+                                    msg
+                                ], fee ? fee : defaultFee, memo)
+                            ];
+                        case 4:
+                            return [
+                                2,
+                                _state.sent()
+                            ];
+                        case 5:
+                            e = _state.sent();
+                            throw new Error("TxClient:sendMsgAddPastSeed: Could not broadcast Tx: " + e.message);
+                        case 6:
+                            return [
+                                2
+                            ];
+                    }
+                });
+            }).apply(this);
+        },
+        sendMsgUpdateAccountAuths: function sendMsgUpdateAccountAuths(param) {
+            var value = param.value, fee = param.fee, memo = param.memo;
+            return _asyncToGenerator(function() {
+                var address, signingClient, msg, e;
+                return __generator(this, function(_state) {
+                    switch(_state.label){
+                        case 0:
+                            if (!signer) {
+                                throw new Error("TxClient:sendMsgUpdateAccountAuths: Unable to sign Tx. Signer is not present.");
+                            }
+                            _state.label = 1;
+                        case 1:
+                            _state.trys.push([
+                                1,
+                                5,
+                                ,
+                                6
+                            ]);
+                            return [
+                                4,
+                                signer.getAccounts()
+                            ];
+                        case 2:
+                            address = _state.sent()[0].address;
+                            return [
+                                4,
+                                SigningStargateClient.connectWithSigner(addr, signer, {
+                                    registry: registry,
+                                    prefix: prefix
+                                })
+                            ];
+                        case 3:
+                            signingClient = _state.sent();
+                            msg = this.msgUpdateAccountAuths({
+                                value: MsgUpdateAccountAuths.fromPartial(value)
+                            });
+                            return [
+                                4,
+                                signingClient.signAndBroadcast(address, [
+                                    msg
+                                ], fee ? fee : defaultFee, memo)
+                            ];
+                        case 4:
+                            return [
+                                2,
+                                _state.sent()
+                            ];
+                        case 5:
+                            e = _state.sent();
+                            throw new Error("TxClient:sendMsgUpdateAccountAuths: Could not broadcast Tx: " + e.message);
+                        case 6:
+                            return [
+                                2
+                            ];
+                    }
+                });
+            }).apply(this);
+        },
+        msgAddAccountAuth: function msgAddAccountAuth(param) {
+            var value = param.value;
+            try {
+                return {
+                    typeUrl: "/saonetwork.sao.did.MsgAddAccountAuth",
+                    value: MsgAddAccountAuth.fromPartial(value)
+                };
+            } catch (e) {
+                throw new Error("TxClient:MsgAddAccountAuth: Could not create message: " + e.message);
+            }
+        },
         msgAddBinding: function msgAddBinding(param) {
             var value = param.value;
             try {
@@ -450,15 +520,15 @@ export var txClient = function() {
                 throw new Error("TxClient:MsgAddBinding: Could not create message: " + e.message);
             }
         },
-        msgUpdateAccountAuths: function msgUpdateAccountAuths(param) {
+        msgUpdateSidDocument: function msgUpdateSidDocument(param) {
             var value = param.value;
             try {
                 return {
-                    typeUrl: "/saonetwork.sao.did.MsgUpdateAccountAuths",
-                    value: MsgUpdateAccountAuths.fromPartial(value)
+                    typeUrl: "/saonetwork.sao.did.MsgUpdateSidDocument",
+                    value: MsgUpdateSidDocument.fromPartial(value)
                 };
             } catch (e) {
-                throw new Error("TxClient:MsgUpdateAccountAuths: Could not create message: " + e.message);
+                throw new Error("TxClient:MsgUpdateSidDocument: Could not create message: " + e.message);
             }
         },
         msgUnbinding: function msgUnbinding(param) {
@@ -472,26 +542,26 @@ export var txClient = function() {
                 throw new Error("TxClient:MsgUnbinding: Could not create message: " + e.message);
             }
         },
-        msgAddAccountAuth: function msgAddAccountAuth(param) {
+        msgAddPastSeed: function msgAddPastSeed(param) {
             var value = param.value;
             try {
                 return {
-                    typeUrl: "/saonetwork.sao.did.MsgAddAccountAuth",
-                    value: MsgAddAccountAuth.fromPartial(value)
+                    typeUrl: "/saonetwork.sao.did.MsgAddPastSeed",
+                    value: MsgAddPastSeed.fromPartial(value)
                 };
             } catch (e) {
-                throw new Error("TxClient:MsgAddAccountAuth: Could not create message: " + e.message);
+                throw new Error("TxClient:MsgAddPastSeed: Could not create message: " + e.message);
             }
         },
-        msgUpdateSidDocument: function msgUpdateSidDocument(param) {
+        msgUpdateAccountAuths: function msgUpdateAccountAuths(param) {
             var value = param.value;
             try {
                 return {
-                    typeUrl: "/saonetwork.sao.did.MsgUpdateSidDocument",
-                    value: MsgUpdateSidDocument.fromPartial(value)
+                    typeUrl: "/saonetwork.sao.did.MsgUpdateAccountAuths",
+                    value: MsgUpdateAccountAuths.fromPartial(value)
                 };
             } catch (e) {
-                throw new Error("TxClient:MsgUpdateSidDocument: Could not create message: " + e.message);
+                throw new Error("TxClient:MsgUpdateAccountAuths: Could not create message: " + e.message);
             }
         }
     };

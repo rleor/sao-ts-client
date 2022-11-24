@@ -604,6 +604,109 @@ export var MsgUpdateSidDocumentResponse = {
         return message;
     }
 };
+function createBaseMsgAddPastSeed() {
+    return {
+        creator: "",
+        did: "",
+        pastSeed: ""
+    };
+}
+export var MsgAddPastSeed = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.did !== "") {
+            writer.uint32(18).string(message.did);
+        }
+        if (message.pastSeed !== "") {
+            writer.uint32(26).string(message.pastSeed);
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseMsgAddPastSeed();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.did = reader.string();
+                    break;
+                case 3:
+                    message.pastSeed = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            creator: isSet(object.creator) ? String(object.creator) : "",
+            did: isSet(object.did) ? String(object.did) : "",
+            pastSeed: isSet(object.pastSeed) ? String(object.pastSeed) : ""
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.did !== undefined && (obj.did = message.did);
+        message.pastSeed !== undefined && (obj.pastSeed = message.pastSeed);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseMsgAddPastSeed();
+        var _object_creator;
+        message.creator = (_object_creator = object.creator) !== null && _object_creator !== void 0 ? _object_creator : "";
+        var _object_did;
+        message.did = (_object_did = object.did) !== null && _object_did !== void 0 ? _object_did : "";
+        var _object_pastSeed;
+        message.pastSeed = (_object_pastSeed = object.pastSeed) !== null && _object_pastSeed !== void 0 ? _object_pastSeed : "";
+        return message;
+    }
+};
+function createBaseMsgAddPastSeedResponse() {
+    return {};
+}
+export var MsgAddPastSeedResponse = {
+    encode: function encode(_) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseMsgAddPastSeedResponse();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(_) {
+        return {};
+    },
+    toJSON: function toJSON(_) {
+        var obj = {};
+        return obj;
+    },
+    fromPartial: function fromPartial(_) {
+        var message = createBaseMsgAddPastSeedResponse();
+        return message;
+    }
+};
 export var MsgClientImpl = /*#__PURE__*/ function() {
     "use strict";
     function MsgClientImpl(rpc) {
@@ -614,6 +717,7 @@ export var MsgClientImpl = /*#__PURE__*/ function() {
         this.AddAccountAuth = this.AddAccountAuth.bind(this);
         this.UpdateAccountAuths = this.UpdateAccountAuths.bind(this);
         this.UpdateSidDocument = this.UpdateSidDocument.bind(this);
+        this.AddPastSeed = this.AddPastSeed.bind(this);
     }
     var _proto = MsgClientImpl.prototype;
     _proto.AddBinding = function AddBinding(request) {
@@ -649,6 +753,13 @@ export var MsgClientImpl = /*#__PURE__*/ function() {
         var promise = this.rpc.request("saonetwork.sao.did.Msg", "UpdateSidDocument", data);
         return promise.then(function(data) {
             return MsgUpdateSidDocumentResponse.decode(new _m0.Reader(data));
+        });
+    };
+    _proto.AddPastSeed = function AddPastSeed(request) {
+        var data = MsgAddPastSeed.encode(request).finish();
+        var promise = this.rpc.request("saonetwork.sao.did.Msg", "AddPastSeed", data);
+        return promise.then(function(data) {
+            return MsgAddPastSeedResponse.decode(new _m0.Reader(data));
         });
     };
     return MsgClientImpl;

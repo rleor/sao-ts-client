@@ -41,6 +41,8 @@ export type DidMsgAddAccountAuthResponse = object;
 
 export type DidMsgAddBindingResponse = object;
 
+export type DidMsgAddPastSeedResponse = object;
+
 export type DidMsgUnbindingResponse = object;
 
 export type DidMsgUpdateAccountAuthsResponse = object;
@@ -53,6 +55,11 @@ export interface DidMsgUpdateSidDocumentResponse {
  * Params defines the parameters for the module.
  */
 export type DidParams = object;
+
+export interface DidPastSeeds {
+  did?: string;
+  seeds?: string[];
+}
 
 export interface DidQueryAllAccountAuthResponse {
   accountAuth?: DidAccountAuth[];
@@ -86,6 +93,21 @@ export interface DidQueryAllAccountListResponse {
 
 export interface DidQueryAllDidBindingProofsResponse {
   didBindingProofs?: DidDidBindingProofs[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
+export interface DidQueryAllPastSeedsResponse {
+  pastSeeds?: DidPastSeeds[];
 
   /**
    * PageResponse is to be embedded in gRPC response messages where the
@@ -143,6 +165,10 @@ export interface DidQueryGetAllAccountAuthsResponse {
 
 export interface DidQueryGetDidBindingProofsResponse {
   didBindingProofs?: DidDidBindingProofs;
+}
+
+export interface DidQueryGetPastSeedsResponse {
+  pastSeeds?: DidPastSeeds;
 }
 
 export interface DidQueryGetSidDocumentResponse {
@@ -533,6 +559,48 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryParams = (params: RequestParams = {}) =>
     this.request<DidQueryParamsResponse, RpcStatus>({
       path: `/SaoNetwork/sao/did/params`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryPastSeedsAll
+   * @summary Queries a list of PastSeeds items.
+   * @request GET:/SaoNetwork/sao/did/past_seeds
+   */
+  queryPastSeedsAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<DidQueryAllPastSeedsResponse, RpcStatus>({
+      path: `/SaoNetwork/sao/did/past_seeds`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryPastSeeds
+   * @summary Queries a PastSeeds by index.
+   * @request GET:/SaoNetwork/sao/did/past_seeds/{did}
+   */
+  queryPastSeeds = (did: string, params: RequestParams = {}) =>
+    this.request<DidQueryGetPastSeedsResponse, RpcStatus>({
+      path: `/SaoNetwork/sao/did/past_seeds/${did}`,
       method: "GET",
       format: "json",
       ...params,

@@ -52,6 +52,15 @@ export interface MsgUpdateSidDocumentResponse {
   docId: string;
 }
 
+export interface MsgAddPastSeed {
+  creator: string;
+  did: string;
+  pastSeed: string;
+}
+
+export interface MsgAddPastSeedResponse {
+}
+
 function createBaseMsgAddBinding(): MsgAddBinding {
   return { creator: "", accountId: "", proof: undefined };
 }
@@ -612,14 +621,121 @@ export const MsgUpdateSidDocumentResponse = {
   },
 };
 
+function createBaseMsgAddPastSeed(): MsgAddPastSeed {
+  return { creator: "", did: "", pastSeed: "" };
+}
+
+export const MsgAddPastSeed = {
+  encode(message: MsgAddPastSeed, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.did !== "") {
+      writer.uint32(18).string(message.did);
+    }
+    if (message.pastSeed !== "") {
+      writer.uint32(26).string(message.pastSeed);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddPastSeed {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgAddPastSeed();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.did = reader.string();
+          break;
+        case 3:
+          message.pastSeed = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgAddPastSeed {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      did: isSet(object.did) ? String(object.did) : "",
+      pastSeed: isSet(object.pastSeed) ? String(object.pastSeed) : "",
+    };
+  },
+
+  toJSON(message: MsgAddPastSeed): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.did !== undefined && (obj.did = message.did);
+    message.pastSeed !== undefined && (obj.pastSeed = message.pastSeed);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgAddPastSeed>, I>>(object: I): MsgAddPastSeed {
+    const message = createBaseMsgAddPastSeed();
+    message.creator = object.creator ?? "";
+    message.did = object.did ?? "";
+    message.pastSeed = object.pastSeed ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgAddPastSeedResponse(): MsgAddPastSeedResponse {
+  return {};
+}
+
+export const MsgAddPastSeedResponse = {
+  encode(_: MsgAddPastSeedResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgAddPastSeedResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgAddPastSeedResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgAddPastSeedResponse {
+    return {};
+  },
+
+  toJSON(_: MsgAddPastSeedResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgAddPastSeedResponse>, I>>(_: I): MsgAddPastSeedResponse {
+    const message = createBaseMsgAddPastSeedResponse();
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   AddBinding(request: MsgAddBinding): Promise<MsgAddBindingResponse>;
   Unbinding(request: MsgUnbinding): Promise<MsgUnbindingResponse>;
   AddAccountAuth(request: MsgAddAccountAuth): Promise<MsgAddAccountAuthResponse>;
   UpdateAccountAuths(request: MsgUpdateAccountAuths): Promise<MsgUpdateAccountAuthsResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   UpdateSidDocument(request: MsgUpdateSidDocument): Promise<MsgUpdateSidDocumentResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  AddPastSeed(request: MsgAddPastSeed): Promise<MsgAddPastSeedResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -631,6 +747,7 @@ export class MsgClientImpl implements Msg {
     this.AddAccountAuth = this.AddAccountAuth.bind(this);
     this.UpdateAccountAuths = this.UpdateAccountAuths.bind(this);
     this.UpdateSidDocument = this.UpdateSidDocument.bind(this);
+    this.AddPastSeed = this.AddPastSeed.bind(this);
   }
   AddBinding(request: MsgAddBinding): Promise<MsgAddBindingResponse> {
     const data = MsgAddBinding.encode(request).finish();
@@ -660,6 +777,12 @@ export class MsgClientImpl implements Msg {
     const data = MsgUpdateSidDocument.encode(request).finish();
     const promise = this.rpc.request("saonetwork.sao.did.Msg", "UpdateSidDocument", data);
     return promise.then((data) => MsgUpdateSidDocumentResponse.decode(new _m0.Reader(data)));
+  }
+
+  AddPastSeed(request: MsgAddPastSeed): Promise<MsgAddPastSeedResponse> {
+    const data = MsgAddPastSeed.encode(request).finish();
+    const promise = this.rpc.request("saonetwork.sao.did.Msg", "AddPastSeed", data);
+    return promise.then((data) => MsgAddPastSeedResponse.decode(new _m0.Reader(data)));
   }
 }
 
