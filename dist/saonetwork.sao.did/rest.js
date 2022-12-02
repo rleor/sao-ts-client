@@ -557,6 +557,37 @@ export var HttpClient = /*#__PURE__*/ function() {
    * No description
    *
    * @tags Query
+   * @name QueryPaymentAddressAll
+   * @summary Queries a list of PaymentAddress items.
+   * @request GET:/SaoNetwork/sao/did/payment_address
+   */ _this.queryPaymentAddressAll = function(query) {
+            var params = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
+            return _this.request(_objectSpread({
+                path: "/SaoNetwork/sao/did/payment_address",
+                method: "GET",
+                query: query,
+                format: "json"
+            }, params));
+        };
+        /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryPaymentAddress
+   * @summary Queries a PaymentAddress by index.
+   * @request GET:/SaoNetwork/sao/did/payment_address/{did}
+   */ _this.queryPaymentAddress = function(did) {
+            var params = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
+            return _this.request(_objectSpread({
+                path: "/SaoNetwork/sao/did/payment_address/".concat(did),
+                method: "GET",
+                format: "json"
+            }, params));
+        };
+        /**
+   * No description
+   *
+   * @tags Query
    * @name QuerySidDocumentAll
    * @summary Queries a list of SidDocument items.
    * @request GET:/SaoNetwork/sao/did/sid_document

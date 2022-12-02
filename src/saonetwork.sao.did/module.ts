@@ -7,21 +7,46 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
+import { MsgCleanupSidDocuments } from "./types/sao/did/tx";
+import { MsgUnbinding } from "./types/sao/did/tx";
+import { MsgAddPastSeed } from "./types/sao/did/tx";
 import { MsgAddAccountAuth } from "./types/sao/did/tx";
+import { MsgAddBinding } from "./types/sao/did/tx";
 import { MsgUpdateAccountAuths } from "./types/sao/did/tx";
 import { MsgResetStore } from "./types/sao/did/tx";
-import { MsgAddPastSeed } from "./types/sao/did/tx";
-import { MsgUnbinding } from "./types/sao/did/tx";
-import { MsgAddBinding } from "./types/sao/did/tx";
-import { MsgCleanupSidDocuments } from "./types/sao/did/tx";
-import { MsgUpdateSidDocument } from "./types/sao/did/tx";
+import { MsgUpdatePaymentAddress } from "./types/sao/did/tx";
 import { MsgCleanupPastSeeds } from "./types/sao/did/tx";
+import { MsgUpdateSidDocument } from "./types/sao/did/tx";
 
 
-export { MsgAddAccountAuth, MsgUpdateAccountAuths, MsgResetStore, MsgAddPastSeed, MsgUnbinding, MsgAddBinding, MsgCleanupSidDocuments, MsgUpdateSidDocument, MsgCleanupPastSeeds };
+export { MsgCleanupSidDocuments, MsgUnbinding, MsgAddPastSeed, MsgAddAccountAuth, MsgAddBinding, MsgUpdateAccountAuths, MsgResetStore, MsgUpdatePaymentAddress, MsgCleanupPastSeeds, MsgUpdateSidDocument };
+
+type sendMsgCleanupSidDocumentsParams = {
+  value: MsgCleanupSidDocuments,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgUnbindingParams = {
+  value: MsgUnbinding,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgAddPastSeedParams = {
+  value: MsgAddPastSeed,
+  fee?: StdFee,
+  memo?: string
+};
 
 type sendMsgAddAccountAuthParams = {
   value: MsgAddAccountAuth,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgAddBindingParams = {
+  value: MsgAddBinding,
   fee?: StdFee,
   memo?: string
 };
@@ -38,32 +63,8 @@ type sendMsgResetStoreParams = {
   memo?: string
 };
 
-type sendMsgAddPastSeedParams = {
-  value: MsgAddPastSeed,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgUnbindingParams = {
-  value: MsgUnbinding,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgAddBindingParams = {
-  value: MsgAddBinding,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgCleanupSidDocumentsParams = {
-  value: MsgCleanupSidDocuments,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgUpdateSidDocumentParams = {
-  value: MsgUpdateSidDocument,
+type sendMsgUpdatePaymentAddressParams = {
+  value: MsgUpdatePaymentAddress,
   fee?: StdFee,
   memo?: string
 };
@@ -74,9 +75,31 @@ type sendMsgCleanupPastSeedsParams = {
   memo?: string
 };
 
+type sendMsgUpdateSidDocumentParams = {
+  value: MsgUpdateSidDocument,
+  fee?: StdFee,
+  memo?: string
+};
+
+
+type msgCleanupSidDocumentsParams = {
+  value: MsgCleanupSidDocuments,
+};
+
+type msgUnbindingParams = {
+  value: MsgUnbinding,
+};
+
+type msgAddPastSeedParams = {
+  value: MsgAddPastSeed,
+};
 
 type msgAddAccountAuthParams = {
   value: MsgAddAccountAuth,
+};
+
+type msgAddBindingParams = {
+  value: MsgAddBinding,
 };
 
 type msgUpdateAccountAuthsParams = {
@@ -87,28 +110,16 @@ type msgResetStoreParams = {
   value: MsgResetStore,
 };
 
-type msgAddPastSeedParams = {
-  value: MsgAddPastSeed,
-};
-
-type msgUnbindingParams = {
-  value: MsgUnbinding,
-};
-
-type msgAddBindingParams = {
-  value: MsgAddBinding,
-};
-
-type msgCleanupSidDocumentsParams = {
-  value: MsgCleanupSidDocuments,
-};
-
-type msgUpdateSidDocumentParams = {
-  value: MsgUpdateSidDocument,
+type msgUpdatePaymentAddressParams = {
+  value: MsgUpdatePaymentAddress,
 };
 
 type msgCleanupPastSeedsParams = {
   value: MsgCleanupPastSeeds,
+};
+
+type msgUpdateSidDocumentParams = {
+  value: MsgUpdateSidDocument,
 };
 
 
@@ -129,6 +140,48 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
+		async sendMsgCleanupSidDocuments({ value, fee, memo }: sendMsgCleanupSidDocumentsParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgCleanupSidDocuments: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgCleanupSidDocuments({ value: MsgCleanupSidDocuments.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgCleanupSidDocuments: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgUnbinding({ value, fee, memo }: sendMsgUnbindingParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUnbinding: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgUnbinding({ value: MsgUnbinding.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgUnbinding: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgAddPastSeed({ value, fee, memo }: sendMsgAddPastSeedParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgAddPastSeed: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgAddPastSeed({ value: MsgAddPastSeed.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgAddPastSeed: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
 		async sendMsgAddAccountAuth({ value, fee, memo }: sendMsgAddAccountAuthParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgAddAccountAuth: Unable to sign Tx. Signer is not present.')
@@ -140,6 +193,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
 				throw new Error('TxClient:sendMsgAddAccountAuth: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgAddBinding({ value, fee, memo }: sendMsgAddBindingParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgAddBinding: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgAddBinding({ value: MsgAddBinding.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgAddBinding: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -171,73 +238,17 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		async sendMsgAddPastSeed({ value, fee, memo }: sendMsgAddPastSeedParams): Promise<DeliverTxResponse> {
+		async sendMsgUpdatePaymentAddress({ value, fee, memo }: sendMsgUpdatePaymentAddressParams): Promise<DeliverTxResponse> {
 			if (!signer) {
-					throw new Error('TxClient:sendMsgAddPastSeed: Unable to sign Tx. Signer is not present.')
+					throw new Error('TxClient:sendMsgUpdatePaymentAddress: Unable to sign Tx. Signer is not present.')
 			}
 			try {			
 				const { address } = (await signer.getAccounts())[0]; 
 				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgAddPastSeed({ value: MsgAddPastSeed.fromPartial(value) })
+				let msg = this.msgUpdatePaymentAddress({ value: MsgUpdatePaymentAddress.fromPartial(value) })
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:sendMsgAddPastSeed: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgUnbinding({ value, fee, memo }: sendMsgUnbindingParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgUnbinding: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgUnbinding({ value: MsgUnbinding.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUnbinding: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgAddBinding({ value, fee, memo }: sendMsgAddBindingParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgAddBinding: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgAddBinding({ value: MsgAddBinding.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgAddBinding: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgCleanupSidDocuments({ value, fee, memo }: sendMsgCleanupSidDocumentsParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgCleanupSidDocuments: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgCleanupSidDocuments({ value: MsgCleanupSidDocuments.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgCleanupSidDocuments: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgUpdateSidDocument({ value, fee, memo }: sendMsgUpdateSidDocumentParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgUpdateSidDocument: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgUpdateSidDocument({ value: MsgUpdateSidDocument.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgUpdateSidDocument: Could not broadcast Tx: '+ e.message)
+				throw new Error('TxClient:sendMsgUpdatePaymentAddress: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -255,12 +266,58 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		async sendMsgUpdateSidDocument({ value, fee, memo }: sendMsgUpdateSidDocumentParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgUpdateSidDocument: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgUpdateSidDocument({ value: MsgUpdateSidDocument.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgUpdateSidDocument: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		
+		msgCleanupSidDocuments({ value }: msgCleanupSidDocumentsParams): EncodeObject {
+			try {
+				return { typeUrl: "/saonetwork.sao.did.MsgCleanupSidDocuments", value: MsgCleanupSidDocuments.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgCleanupSidDocuments: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUnbinding({ value }: msgUnbindingParams): EncodeObject {
+			try {
+				return { typeUrl: "/saonetwork.sao.did.MsgUnbinding", value: MsgUnbinding.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUnbinding: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgAddPastSeed({ value }: msgAddPastSeedParams): EncodeObject {
+			try {
+				return { typeUrl: "/saonetwork.sao.did.MsgAddPastSeed", value: MsgAddPastSeed.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgAddPastSeed: Could not create message: ' + e.message)
+			}
+		},
 		
 		msgAddAccountAuth({ value }: msgAddAccountAuthParams): EncodeObject {
 			try {
 				return { typeUrl: "/saonetwork.sao.did.MsgAddAccountAuth", value: MsgAddAccountAuth.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgAddAccountAuth: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgAddBinding({ value }: msgAddBindingParams): EncodeObject {
+			try {
+				return { typeUrl: "/saonetwork.sao.did.MsgAddBinding", value: MsgAddBinding.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgAddBinding: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -280,43 +337,11 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		msgAddPastSeed({ value }: msgAddPastSeedParams): EncodeObject {
+		msgUpdatePaymentAddress({ value }: msgUpdatePaymentAddressParams): EncodeObject {
 			try {
-				return { typeUrl: "/saonetwork.sao.did.MsgAddPastSeed", value: MsgAddPastSeed.fromPartial( value ) }  
+				return { typeUrl: "/saonetwork.sao.did.MsgUpdatePaymentAddress", value: MsgUpdatePaymentAddress.fromPartial( value ) }  
 			} catch (e: any) {
-				throw new Error('TxClient:MsgAddPastSeed: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgUnbinding({ value }: msgUnbindingParams): EncodeObject {
-			try {
-				return { typeUrl: "/saonetwork.sao.did.MsgUnbinding", value: MsgUnbinding.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgUnbinding: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgAddBinding({ value }: msgAddBindingParams): EncodeObject {
-			try {
-				return { typeUrl: "/saonetwork.sao.did.MsgAddBinding", value: MsgAddBinding.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgAddBinding: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgCleanupSidDocuments({ value }: msgCleanupSidDocumentsParams): EncodeObject {
-			try {
-				return { typeUrl: "/saonetwork.sao.did.MsgCleanupSidDocuments", value: MsgCleanupSidDocuments.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgCleanupSidDocuments: Could not create message: ' + e.message)
-			}
-		},
-		
-		msgUpdateSidDocument({ value }: msgUpdateSidDocumentParams): EncodeObject {
-			try {
-				return { typeUrl: "/saonetwork.sao.did.MsgUpdateSidDocument", value: MsgUpdateSidDocument.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgUpdateSidDocument: Could not create message: ' + e.message)
+				throw new Error('TxClient:MsgUpdatePaymentAddress: Could not create message: ' + e.message)
 			}
 		},
 		
@@ -325,6 +350,14 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return { typeUrl: "/saonetwork.sao.did.MsgCleanupPastSeeds", value: MsgCleanupPastSeeds.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgCleanupPastSeeds: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgUpdateSidDocument({ value }: msgUpdateSidDocumentParams): EncodeObject {
+			try {
+				return { typeUrl: "/saonetwork.sao.did.MsgUpdateSidDocument", value: MsgUpdateSidDocument.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgUpdateSidDocument: Could not create message: ' + e.message)
 			}
 		},
 		

@@ -6,6 +6,7 @@ import { AccountList } from "./account_list";
 import { DidBindingProofs } from "./did_binding_proofs";
 import { Params } from "./params";
 import { PastSeeds } from "./past_seeds";
+import { PaymentAddress } from "./payment_address";
 import { SidDocument } from "./sid_document";
 import { SidDocumentVersion } from "./sid_document_version";
 
@@ -128,6 +129,23 @@ export interface QueryAllPastSeedsRequest {
 
 export interface QueryAllPastSeedsResponse {
   pastSeeds: PastSeeds[];
+  pagination: PageResponse | undefined;
+}
+
+export interface QueryGetPaymentAddressRequest {
+  did: string;
+}
+
+export interface QueryGetPaymentAddressResponse {
+  paymentAddress: PaymentAddress | undefined;
+}
+
+export interface QueryAllPaymentAddressRequest {
+  pagination: PageRequest | undefined;
+}
+
+export interface QueryAllPaymentAddressResponse {
+  paymentAddress: PaymentAddress[];
   pagination: PageResponse | undefined;
 }
 
@@ -1631,6 +1649,230 @@ export const QueryAllPastSeedsResponse = {
   },
 };
 
+function createBaseQueryGetPaymentAddressRequest(): QueryGetPaymentAddressRequest {
+  return { did: "" };
+}
+
+export const QueryGetPaymentAddressRequest = {
+  encode(message: QueryGetPaymentAddressRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.did !== "") {
+      writer.uint32(10).string(message.did);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPaymentAddressRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetPaymentAddressRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.did = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetPaymentAddressRequest {
+    return { did: isSet(object.did) ? String(object.did) : "" };
+  },
+
+  toJSON(message: QueryGetPaymentAddressRequest): unknown {
+    const obj: any = {};
+    message.did !== undefined && (obj.did = message.did);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetPaymentAddressRequest>, I>>(
+    object: I,
+  ): QueryGetPaymentAddressRequest {
+    const message = createBaseQueryGetPaymentAddressRequest();
+    message.did = object.did ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetPaymentAddressResponse(): QueryGetPaymentAddressResponse {
+  return { paymentAddress: undefined };
+}
+
+export const QueryGetPaymentAddressResponse = {
+  encode(message: QueryGetPaymentAddressResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.paymentAddress !== undefined) {
+      PaymentAddress.encode(message.paymentAddress, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetPaymentAddressResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetPaymentAddressResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.paymentAddress = PaymentAddress.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetPaymentAddressResponse {
+    return {
+      paymentAddress: isSet(object.paymentAddress) ? PaymentAddress.fromJSON(object.paymentAddress) : undefined,
+    };
+  },
+
+  toJSON(message: QueryGetPaymentAddressResponse): unknown {
+    const obj: any = {};
+    message.paymentAddress !== undefined
+      && (obj.paymentAddress = message.paymentAddress ? PaymentAddress.toJSON(message.paymentAddress) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetPaymentAddressResponse>, I>>(
+    object: I,
+  ): QueryGetPaymentAddressResponse {
+    const message = createBaseQueryGetPaymentAddressResponse();
+    message.paymentAddress = (object.paymentAddress !== undefined && object.paymentAddress !== null)
+      ? PaymentAddress.fromPartial(object.paymentAddress)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllPaymentAddressRequest(): QueryAllPaymentAddressRequest {
+  return { pagination: undefined };
+}
+
+export const QueryAllPaymentAddressRequest = {
+  encode(message: QueryAllPaymentAddressRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPaymentAddressRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllPaymentAddressRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllPaymentAddressRequest {
+    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
+  },
+
+  toJSON(message: QueryAllPaymentAddressRequest): unknown {
+    const obj: any = {};
+    message.pagination !== undefined
+      && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAllPaymentAddressRequest>, I>>(
+    object: I,
+  ): QueryAllPaymentAddressRequest {
+    const message = createBaseQueryAllPaymentAddressRequest();
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseQueryAllPaymentAddressResponse(): QueryAllPaymentAddressResponse {
+  return { paymentAddress: [], pagination: undefined };
+}
+
+export const QueryAllPaymentAddressResponse = {
+  encode(message: QueryAllPaymentAddressResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.paymentAddress) {
+      PaymentAddress.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAllPaymentAddressResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryAllPaymentAddressResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.paymentAddress.push(PaymentAddress.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryAllPaymentAddressResponse {
+    return {
+      paymentAddress: Array.isArray(object?.paymentAddress)
+        ? object.paymentAddress.map((e: any) => PaymentAddress.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
+    };
+  },
+
+  toJSON(message: QueryAllPaymentAddressResponse): unknown {
+    const obj: any = {};
+    if (message.paymentAddress) {
+      obj.paymentAddress = message.paymentAddress.map((e) => e ? PaymentAddress.toJSON(e) : undefined);
+    } else {
+      obj.paymentAddress = [];
+    }
+    message.pagination !== undefined
+      && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAllPaymentAddressResponse>, I>>(
+    object: I,
+  ): QueryAllPaymentAddressResponse {
+    const message = createBaseQueryAllPaymentAddressResponse();
+    message.paymentAddress = object.paymentAddress?.map((e) => PaymentAddress.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -1661,6 +1903,10 @@ export interface Query {
   PastSeeds(request: QueryGetPastSeedsRequest): Promise<QueryGetPastSeedsResponse>;
   /** Queries a list of PastSeeds items. */
   PastSeedsAll(request: QueryAllPastSeedsRequest): Promise<QueryAllPastSeedsResponse>;
+  /** Queries a PaymentAddress by index. */
+  PaymentAddress(request: QueryGetPaymentAddressRequest): Promise<QueryGetPaymentAddressResponse>;
+  /** Queries a list of PaymentAddress items. */
+  PaymentAddressAll(request: QueryAllPaymentAddressRequest): Promise<QueryAllPaymentAddressResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -1681,6 +1927,8 @@ export class QueryClientImpl implements Query {
     this.SidDocumentVersionAll = this.SidDocumentVersionAll.bind(this);
     this.PastSeeds = this.PastSeeds.bind(this);
     this.PastSeedsAll = this.PastSeedsAll.bind(this);
+    this.PaymentAddress = this.PaymentAddress.bind(this);
+    this.PaymentAddressAll = this.PaymentAddressAll.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -1764,6 +2012,18 @@ export class QueryClientImpl implements Query {
     const data = QueryAllPastSeedsRequest.encode(request).finish();
     const promise = this.rpc.request("saonetwork.sao.did.Query", "PastSeedsAll", data);
     return promise.then((data) => QueryAllPastSeedsResponse.decode(new _m0.Reader(data)));
+  }
+
+  PaymentAddress(request: QueryGetPaymentAddressRequest): Promise<QueryGetPaymentAddressResponse> {
+    const data = QueryGetPaymentAddressRequest.encode(request).finish();
+    const promise = this.rpc.request("saonetwork.sao.did.Query", "PaymentAddress", data);
+    return promise.then((data) => QueryGetPaymentAddressResponse.decode(new _m0.Reader(data)));
+  }
+
+  PaymentAddressAll(request: QueryAllPaymentAddressRequest): Promise<QueryAllPaymentAddressResponse> {
+    const data = QueryAllPaymentAddressRequest.encode(request).finish();
+    const promise = this.rpc.request("saonetwork.sao.did.Query", "PaymentAddressAll", data);
+    return promise.then((data) => QueryAllPaymentAddressResponse.decode(new _m0.Reader(data)));
   }
 }
 

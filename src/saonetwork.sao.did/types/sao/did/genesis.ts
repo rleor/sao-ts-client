@@ -5,6 +5,7 @@ import { AccountList } from "./account_list";
 import { DidBindingProofs } from "./did_binding_proofs";
 import { Params } from "./params";
 import { PastSeeds } from "./past_seeds";
+import { PaymentAddress } from "./payment_address";
 import { SidDocument } from "./sid_document";
 import { SidDocumentVersion } from "./sid_document_version";
 
@@ -18,8 +19,9 @@ export interface GenesisState {
   accountAuthList: AccountAuth[];
   sidDocumentList: SidDocument[];
   sidDocumentVersionList: SidDocumentVersion[];
-  /** this line is used by starport scaffolding # genesis/proto/state */
   pastSeedsList: PastSeeds[];
+  /** this line is used by starport scaffolding # genesis/proto/state */
+  paymentAddressList: PaymentAddress[];
 }
 
 function createBaseGenesisState(): GenesisState {
@@ -31,6 +33,7 @@ function createBaseGenesisState(): GenesisState {
     sidDocumentList: [],
     sidDocumentVersionList: [],
     pastSeedsList: [],
+    paymentAddressList: [],
   };
 }
 
@@ -56,6 +59,9 @@ export const GenesisState = {
     }
     for (const v of message.pastSeedsList) {
       PastSeeds.encode(v!, writer.uint32(58).fork()).ldelim();
+    }
+    for (const v of message.paymentAddressList) {
+      PaymentAddress.encode(v!, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
@@ -88,6 +94,9 @@ export const GenesisState = {
         case 7:
           message.pastSeedsList.push(PastSeeds.decode(reader, reader.uint32()));
           break;
+        case 8:
+          message.paymentAddressList.push(PaymentAddress.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -116,6 +125,9 @@ export const GenesisState = {
         : [],
       pastSeedsList: Array.isArray(object?.pastSeedsList)
         ? object.pastSeedsList.map((e: any) => PastSeeds.fromJSON(e))
+        : [],
+      paymentAddressList: Array.isArray(object?.paymentAddressList)
+        ? object.paymentAddressList.map((e: any) => PaymentAddress.fromJSON(e))
         : [],
     };
   },
@@ -155,6 +167,11 @@ export const GenesisState = {
     } else {
       obj.pastSeedsList = [];
     }
+    if (message.paymentAddressList) {
+      obj.paymentAddressList = message.paymentAddressList.map((e) => e ? PaymentAddress.toJSON(e) : undefined);
+    } else {
+      obj.paymentAddressList = [];
+    }
     return obj;
   },
 
@@ -169,6 +186,7 @@ export const GenesisState = {
     message.sidDocumentList = object.sidDocumentList?.map((e) => SidDocument.fromPartial(e)) || [];
     message.sidDocumentVersionList = object.sidDocumentVersionList?.map((e) => SidDocumentVersion.fromPartial(e)) || [];
     message.pastSeedsList = object.pastSeedsList?.map((e) => PastSeeds.fromPartial(e)) || [];
+    message.paymentAddressList = object.paymentAddressList?.map((e) => PaymentAddress.fromPartial(e)) || [];
     return message;
   },
 };

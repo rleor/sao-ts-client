@@ -989,6 +989,98 @@ export var MsgResetStoreResponse = {
         return message;
     }
 };
+function createBaseMsgUpdatePaymentAddress() {
+    return {
+        creator: "",
+        accountId: ""
+    };
+}
+export var MsgUpdatePaymentAddress = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.accountId !== "") {
+            writer.uint32(18).string(message.accountId);
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseMsgUpdatePaymentAddress();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.accountId = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            creator: isSet(object.creator) ? String(object.creator) : "",
+            accountId: isSet(object.accountId) ? String(object.accountId) : ""
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.accountId !== undefined && (obj.accountId = message.accountId);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseMsgUpdatePaymentAddress();
+        var _object_creator;
+        message.creator = (_object_creator = object.creator) !== null && _object_creator !== void 0 ? _object_creator : "";
+        var _object_accountId;
+        message.accountId = (_object_accountId = object.accountId) !== null && _object_accountId !== void 0 ? _object_accountId : "";
+        return message;
+    }
+};
+function createBaseMsgUpdatePaymentAddressResponse() {
+    return {};
+}
+export var MsgUpdatePaymentAddressResponse = {
+    encode: function encode(_) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseMsgUpdatePaymentAddressResponse();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(_) {
+        return {};
+    },
+    toJSON: function toJSON(_) {
+        var obj = {};
+        return obj;
+    },
+    fromPartial: function fromPartial(_) {
+        var message = createBaseMsgUpdatePaymentAddressResponse();
+        return message;
+    }
+};
 export var MsgClientImpl = /*#__PURE__*/ function() {
     "use strict";
     function MsgClientImpl(rpc) {
@@ -1003,6 +1095,7 @@ export var MsgClientImpl = /*#__PURE__*/ function() {
         this.CleanupSidDocuments = this.CleanupSidDocuments.bind(this);
         this.CleanupPastSeeds = this.CleanupPastSeeds.bind(this);
         this.ResetStore = this.ResetStore.bind(this);
+        this.UpdatePaymentAddress = this.UpdatePaymentAddress.bind(this);
     }
     var _proto = MsgClientImpl.prototype;
     _proto.AddBinding = function AddBinding(request) {
@@ -1066,6 +1159,13 @@ export var MsgClientImpl = /*#__PURE__*/ function() {
         var promise = this.rpc.request("saonetwork.sao.did.Msg", "ResetStore", data);
         return promise.then(function(data) {
             return MsgResetStoreResponse.decode(new _m0.Reader(data));
+        });
+    };
+    _proto.UpdatePaymentAddress = function UpdatePaymentAddress(request) {
+        var data = MsgUpdatePaymentAddress.encode(request).finish();
+        var promise = this.rpc.request("saonetwork.sao.did.Msg", "UpdatePaymentAddress", data);
+        return promise.then(function(data) {
+            return MsgUpdatePaymentAddressResponse.decode(new _m0.Reader(data));
         });
     };
     return MsgClientImpl;

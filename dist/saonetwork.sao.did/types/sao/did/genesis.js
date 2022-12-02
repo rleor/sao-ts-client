@@ -11,6 +11,7 @@ import { AccountList } from "./account_list";
 import { DidBindingProofs } from "./did_binding_proofs";
 import { Params } from "./params";
 import { PastSeeds } from "./past_seeds";
+import { PaymentAddress } from "./payment_address";
 import { SidDocument } from "./sid_document";
 import { SidDocumentVersion } from "./sid_document_version";
 export var protobufPackage = "saonetwork.sao.did";
@@ -22,7 +23,8 @@ function createBaseGenesisState() {
         accountAuthList: [],
         sidDocumentList: [],
         sidDocumentVersionList: [],
-        pastSeedsList: []
+        pastSeedsList: [],
+        paymentAddressList: []
     };
 }
 export var GenesisState = {
@@ -151,6 +153,26 @@ export var GenesisState = {
                 }
             }
         }
+        var _iteratorNormalCompletion6 = true, _didIteratorError6 = false, _iteratorError6 = undefined;
+        try {
+            for(var _iterator6 = message.paymentAddressList[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true){
+                var v6 = _step6.value;
+                PaymentAddress.encode(v6, writer.uint32(66).fork()).ldelim();
+            }
+        } catch (err) {
+            _didIteratorError6 = true;
+            _iteratorError6 = err;
+        } finally{
+            try {
+                if (!_iteratorNormalCompletion6 && _iterator6.return != null) {
+                    _iterator6.return();
+                }
+            } finally{
+                if (_didIteratorError6) {
+                    throw _iteratorError6;
+                }
+            }
+        }
         return writer;
     },
     decode: function decode(input, length) {
@@ -181,6 +203,9 @@ export var GenesisState = {
                 case 7:
                     message.pastSeedsList.push(PastSeeds.decode(reader, reader.uint32()));
                     break;
+                case 8:
+                    message.paymentAddressList.push(PaymentAddress.decode(reader, reader.uint32()));
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -208,6 +233,9 @@ export var GenesisState = {
             }) : [],
             pastSeedsList: Array.isArray(object === null || object === void 0 ? void 0 : object.pastSeedsList) ? object.pastSeedsList.map(function(e) {
                 return PastSeeds.fromJSON(e);
+            }) : [],
+            paymentAddressList: Array.isArray(object === null || object === void 0 ? void 0 : object.paymentAddressList) ? object.paymentAddressList.map(function(e) {
+                return PaymentAddress.fromJSON(e);
             }) : []
         };
     },
@@ -256,10 +284,17 @@ export var GenesisState = {
         } else {
             obj.pastSeedsList = [];
         }
+        if (message.paymentAddressList) {
+            obj.paymentAddressList = message.paymentAddressList.map(function(e) {
+                return e ? PaymentAddress.toJSON(e) : undefined;
+            });
+        } else {
+            obj.paymentAddressList = [];
+        }
         return obj;
     },
     fromPartial: function fromPartial(object) {
-        var _object_didBindingProofsList, _object_accountListList, _object_accountAuthList, _object_sidDocumentList, _object_sidDocumentVersionList, _object_pastSeedsList;
+        var _object_didBindingProofsList, _object_accountListList, _object_accountAuthList, _object_sidDocumentList, _object_sidDocumentVersionList, _object_pastSeedsList, _object_paymentAddressList;
         var message = createBaseGenesisState();
         message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
         message.didBindingProofsList = ((_object_didBindingProofsList = object.didBindingProofsList) === null || _object_didBindingProofsList === void 0 ? void 0 : _object_didBindingProofsList.map(function(e) {
@@ -279,6 +314,9 @@ export var GenesisState = {
         })) || [];
         message.pastSeedsList = ((_object_pastSeedsList = object.pastSeedsList) === null || _object_pastSeedsList === void 0 ? void 0 : _object_pastSeedsList.map(function(e) {
             return PastSeeds.fromPartial(e);
+        })) || [];
+        message.paymentAddressList = ((_object_paymentAddressList = object.paymentAddressList) === null || _object_paymentAddressList === void 0 ? void 0 : _object_paymentAddressList.map(function(e) {
+            return PaymentAddress.fromPartial(e);
         })) || [];
         return message;
     }

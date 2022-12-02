@@ -84,6 +84,14 @@ export interface MsgResetStore {
 export interface MsgResetStoreResponse {
 }
 
+export interface MsgUpdatePaymentAddress {
+  creator: string;
+  accountId: string;
+}
+
+export interface MsgUpdatePaymentAddressResponse {
+}
+
 function createBaseMsgAddBinding(): MsgAddBinding {
   return { creator: "", accountId: "", proof: undefined };
 }
@@ -1025,6 +1033,103 @@ export const MsgResetStoreResponse = {
   },
 };
 
+function createBaseMsgUpdatePaymentAddress(): MsgUpdatePaymentAddress {
+  return { creator: "", accountId: "" };
+}
+
+export const MsgUpdatePaymentAddress = {
+  encode(message: MsgUpdatePaymentAddress, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.accountId !== "") {
+      writer.uint32(18).string(message.accountId);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdatePaymentAddress {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdatePaymentAddress();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.accountId = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgUpdatePaymentAddress {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      accountId: isSet(object.accountId) ? String(object.accountId) : "",
+    };
+  },
+
+  toJSON(message: MsgUpdatePaymentAddress): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.accountId !== undefined && (obj.accountId = message.accountId);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgUpdatePaymentAddress>, I>>(object: I): MsgUpdatePaymentAddress {
+    const message = createBaseMsgUpdatePaymentAddress();
+    message.creator = object.creator ?? "";
+    message.accountId = object.accountId ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgUpdatePaymentAddressResponse(): MsgUpdatePaymentAddressResponse {
+  return {};
+}
+
+export const MsgUpdatePaymentAddressResponse = {
+  encode(_: MsgUpdatePaymentAddressResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdatePaymentAddressResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdatePaymentAddressResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgUpdatePaymentAddressResponse {
+    return {};
+  },
+
+  toJSON(_: MsgUpdatePaymentAddressResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgUpdatePaymentAddressResponse>, I>>(_: I): MsgUpdatePaymentAddressResponse {
+    const message = createBaseMsgUpdatePaymentAddressResponse();
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   AddBinding(request: MsgAddBinding): Promise<MsgAddBindingResponse>;
@@ -1035,8 +1140,9 @@ export interface Msg {
   AddPastSeed(request: MsgAddPastSeed): Promise<MsgAddPastSeedResponse>;
   CleanupSidDocuments(request: MsgCleanupSidDocuments): Promise<MsgCleanupSidDocumentsResponse>;
   CleanupPastSeeds(request: MsgCleanupPastSeeds): Promise<MsgCleanupPastSeedsResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   ResetStore(request: MsgResetStore): Promise<MsgResetStoreResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  UpdatePaymentAddress(request: MsgUpdatePaymentAddress): Promise<MsgUpdatePaymentAddressResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -1052,6 +1158,7 @@ export class MsgClientImpl implements Msg {
     this.CleanupSidDocuments = this.CleanupSidDocuments.bind(this);
     this.CleanupPastSeeds = this.CleanupPastSeeds.bind(this);
     this.ResetStore = this.ResetStore.bind(this);
+    this.UpdatePaymentAddress = this.UpdatePaymentAddress.bind(this);
   }
   AddBinding(request: MsgAddBinding): Promise<MsgAddBindingResponse> {
     const data = MsgAddBinding.encode(request).finish();
@@ -1105,6 +1212,12 @@ export class MsgClientImpl implements Msg {
     const data = MsgResetStore.encode(request).finish();
     const promise = this.rpc.request("saonetwork.sao.did.Msg", "ResetStore", data);
     return promise.then((data) => MsgResetStoreResponse.decode(new _m0.Reader(data)));
+  }
+
+  UpdatePaymentAddress(request: MsgUpdatePaymentAddress): Promise<MsgUpdatePaymentAddressResponse> {
+    const data = MsgUpdatePaymentAddress.encode(request).finish();
+    const promise = this.rpc.request("saonetwork.sao.did.Msg", "UpdatePaymentAddress", data);
+    return promise.then((data) => MsgUpdatePaymentAddressResponse.decode(new _m0.Reader(data)));
   }
 }
 

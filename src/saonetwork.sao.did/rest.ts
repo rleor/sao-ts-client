@@ -53,6 +53,8 @@ export type DidMsgUnbindingResponse = object;
 
 export type DidMsgUpdateAccountAuthsResponse = object;
 
+export type DidMsgUpdatePaymentAddressResponse = object;
+
 export interface DidMsgUpdateSidDocumentResponse {
   docId?: string;
 }
@@ -65,6 +67,11 @@ export type DidParams = object;
 export interface DidPastSeeds {
   did?: string;
   seeds?: string[];
+}
+
+export interface DidPaymentAddress {
+  did?: string;
+  address?: string;
 }
 
 export interface DidPubKey {
@@ -132,6 +139,21 @@ export interface DidQueryAllPastSeedsResponse {
   pagination?: V1Beta1PageResponse;
 }
 
+export interface DidQueryAllPaymentAddressResponse {
+  paymentAddress?: DidPaymentAddress[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
 export interface DidQueryAllSidDocumentResponse {
   sidDocument?: DidSidDocument[];
 
@@ -180,6 +202,10 @@ export interface DidQueryGetDidBindingProofsResponse {
 
 export interface DidQueryGetPastSeedsResponse {
   pastSeeds?: DidPastSeeds;
+}
+
+export interface DidQueryGetPaymentAddressResponse {
+  paymentAddress?: DidPaymentAddress;
 }
 
 export interface DidQueryGetSidDocumentResponse {
@@ -611,6 +637,48 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryPastSeeds = (did: string, params: RequestParams = {}) =>
     this.request<DidQueryGetPastSeedsResponse, RpcStatus>({
       path: `/SaoNetwork/sao/did/past_seeds/${did}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryPaymentAddressAll
+   * @summary Queries a list of PaymentAddress items.
+   * @request GET:/SaoNetwork/sao/did/payment_address
+   */
+  queryPaymentAddressAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<DidQueryAllPaymentAddressResponse, RpcStatus>({
+      path: `/SaoNetwork/sao/did/payment_address`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryPaymentAddress
+   * @summary Queries a PaymentAddress by index.
+   * @request GET:/SaoNetwork/sao/did/payment_address/{did}
+   */
+  queryPaymentAddress = (did: string, params: RequestParams = {}) =>
+    this.request<DidQueryGetPaymentAddressResponse, RpcStatus>({
+      path: `/SaoNetwork/sao/did/payment_address/${did}`,
       method: "GET",
       format: "json",
       ...params,

@@ -17,6 +17,7 @@ import { AccountList } from "./account_list";
 import { DidBindingProofs } from "./did_binding_proofs";
 import { Params } from "./params";
 import { PastSeeds } from "./past_seeds";
+import { PaymentAddress } from "./payment_address";
 import { SidDocument } from "./sid_document";
 import { SidDocumentVersion } from "./sid_document_version";
 export var protobufPackage = "saonetwork.sao.did";
@@ -1559,6 +1560,229 @@ export var QueryAllPastSeedsResponse = {
         return message;
     }
 };
+function createBaseQueryGetPaymentAddressRequest() {
+    return {
+        did: ""
+    };
+}
+export var QueryGetPaymentAddressRequest = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.did !== "") {
+            writer.uint32(10).string(message.did);
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseQueryGetPaymentAddressRequest();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.did = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            did: isSet(object.did) ? String(object.did) : ""
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.did !== undefined && (obj.did = message.did);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseQueryGetPaymentAddressRequest();
+        var _object_did;
+        message.did = (_object_did = object.did) !== null && _object_did !== void 0 ? _object_did : "";
+        return message;
+    }
+};
+function createBaseQueryGetPaymentAddressResponse() {
+    return {
+        paymentAddress: undefined
+    };
+}
+export var QueryGetPaymentAddressResponse = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.paymentAddress !== undefined) {
+            PaymentAddress.encode(message.paymentAddress, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseQueryGetPaymentAddressResponse();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.paymentAddress = PaymentAddress.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            paymentAddress: isSet(object.paymentAddress) ? PaymentAddress.fromJSON(object.paymentAddress) : undefined
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.paymentAddress !== undefined && (obj.paymentAddress = message.paymentAddress ? PaymentAddress.toJSON(message.paymentAddress) : undefined);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseQueryGetPaymentAddressResponse();
+        message.paymentAddress = object.paymentAddress !== undefined && object.paymentAddress !== null ? PaymentAddress.fromPartial(object.paymentAddress) : undefined;
+        return message;
+    }
+};
+function createBaseQueryAllPaymentAddressRequest() {
+    return {
+        pagination: undefined
+    };
+}
+export var QueryAllPaymentAddressRequest = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.pagination !== undefined) {
+            PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseQueryAllPaymentAddressRequest();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.pagination = PageRequest.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseQueryAllPaymentAddressRequest();
+        message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+        return message;
+    }
+};
+function createBaseQueryAllPaymentAddressResponse() {
+    return {
+        paymentAddress: [],
+        pagination: undefined
+    };
+}
+export var QueryAllPaymentAddressResponse = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
+        try {
+            for(var _iterator = message.paymentAddress[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true){
+                var v = _step.value;
+                PaymentAddress.encode(v, writer.uint32(10).fork()).ldelim();
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally{
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return != null) {
+                    _iterator.return();
+                }
+            } finally{
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
+        }
+        if (message.pagination !== undefined) {
+            PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseQueryAllPaymentAddressResponse();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.paymentAddress.push(PaymentAddress.decode(reader, reader.uint32()));
+                    break;
+                case 2:
+                    message.pagination = PageResponse.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            paymentAddress: Array.isArray(object === null || object === void 0 ? void 0 : object.paymentAddress) ? object.paymentAddress.map(function(e) {
+                return PaymentAddress.fromJSON(e);
+            }) : [],
+            pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        if (message.paymentAddress) {
+            obj.paymentAddress = message.paymentAddress.map(function(e) {
+                return e ? PaymentAddress.toJSON(e) : undefined;
+            });
+        } else {
+            obj.paymentAddress = [];
+        }
+        message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var _object_paymentAddress;
+        var message = createBaseQueryAllPaymentAddressResponse();
+        message.paymentAddress = ((_object_paymentAddress = object.paymentAddress) === null || _object_paymentAddress === void 0 ? void 0 : _object_paymentAddress.map(function(e) {
+            return PaymentAddress.fromPartial(e);
+        })) || [];
+        message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+        return message;
+    }
+};
 export var QueryClientImpl = /*#__PURE__*/ function() {
     "use strict";
     function QueryClientImpl(rpc) {
@@ -1578,6 +1802,8 @@ export var QueryClientImpl = /*#__PURE__*/ function() {
         this.SidDocumentVersionAll = this.SidDocumentVersionAll.bind(this);
         this.PastSeeds = this.PastSeeds.bind(this);
         this.PastSeedsAll = this.PastSeedsAll.bind(this);
+        this.PaymentAddress = this.PaymentAddress.bind(this);
+        this.PaymentAddressAll = this.PaymentAddressAll.bind(this);
     }
     var _proto = QueryClientImpl.prototype;
     _proto.Params = function Params(request) {
@@ -1676,6 +1902,20 @@ export var QueryClientImpl = /*#__PURE__*/ function() {
         var promise = this.rpc.request("saonetwork.sao.did.Query", "PastSeedsAll", data);
         return promise.then(function(data) {
             return QueryAllPastSeedsResponse.decode(new _m0.Reader(data));
+        });
+    };
+    _proto.PaymentAddress = function PaymentAddress(request) {
+        var data = QueryGetPaymentAddressRequest.encode(request).finish();
+        var promise = this.rpc.request("saonetwork.sao.did.Query", "PaymentAddress", data);
+        return promise.then(function(data) {
+            return QueryGetPaymentAddressResponse.decode(new _m0.Reader(data));
+        });
+    };
+    _proto.PaymentAddressAll = function PaymentAddressAll(request) {
+        var data = QueryAllPaymentAddressRequest.encode(request).finish();
+        var promise = this.rpc.request("saonetwork.sao.did.Query", "PaymentAddressAll", data);
+        return promise.then(function(data) {
+            return QueryAllPaymentAddressResponse.decode(new _m0.Reader(data));
         });
     };
     return QueryClientImpl;
