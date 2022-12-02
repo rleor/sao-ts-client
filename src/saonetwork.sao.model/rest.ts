@@ -24,12 +24,20 @@ export interface ModelMetadata {
   update?: boolean;
   commit?: string;
   rule?: string;
+
+  /** @format uint64 */
+  duration?: string;
+
+  /** @format uint64 */
+  createdAt?: string;
 }
 
 export interface ModelModel {
   key?: string;
   data?: string;
 }
+
+export type ModelMsgClaimResponse = object;
 
 /**
  * Params defines the parameters for the module.

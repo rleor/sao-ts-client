@@ -43,6 +43,12 @@ export type DidMsgAddBindingResponse = object;
 
 export type DidMsgAddPastSeedResponse = object;
 
+export type DidMsgCleanupPastSeedsResponse = object;
+
+export type DidMsgCleanupSidDocumentsResponse = object;
+
+export type DidMsgResetStoreResponse = object;
+
 export type DidMsgUnbindingResponse = object;
 
 export type DidMsgUpdateAccountAuthsResponse = object;
@@ -59,6 +65,11 @@ export type DidParams = object;
 export interface DidPastSeeds {
   did?: string;
   seeds?: string[];
+}
+
+export interface DidPubKey {
+  name?: string;
+  value?: string;
 }
 
 export interface DidQueryAllAccountAuthResponse {
@@ -189,8 +200,7 @@ export interface DidQueryParamsResponse {
 
 export interface DidSidDocument {
   versionId?: string;
-  signing?: string;
-  encryption?: string;
+  keys?: DidPubKey[];
 }
 
 export interface DidSidDocumentVersion {

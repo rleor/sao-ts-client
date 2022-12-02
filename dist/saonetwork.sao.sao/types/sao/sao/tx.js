@@ -1,4 +1,12 @@
-/* eslint-disable */ function _classCallCheck(instance, Constructor) {
+/* eslint-disable */ function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+    for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
+    return arr2;
+}
+function _arrayWithHoles(arr) {
+    if (Array.isArray(arr)) return arr;
+}
+function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
         throw new TypeError("Cannot call a class as a function");
     }
@@ -10,10 +18,49 @@ function _instanceof(left, right) {
         return left instanceof right;
     }
 }
+function _iterableToArrayLimit(arr, i) {
+    var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+    if (_i == null) return;
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _s, _e;
+    try {
+        for(_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true){
+            _arr.push(_s.value);
+            if (i && _arr.length === i) break;
+        }
+    } catch (err) {
+        _d = true;
+        _e = err;
+    } finally{
+        try {
+            if (!_n && _i["return"] != null) _i["return"]();
+        } finally{
+            if (_d) throw _e;
+        }
+    }
+    return _arr;
+}
+function _nonIterableRest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _slicedToArray(arr, i) {
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+}
+function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(n);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { JwsSignature } from "./jws_signature";
 import { Proposal } from "./proposal";
+import { RenewProposal } from "./renew_proposal";
 export var protobufPackage = "saonetwork.sao.sao";
 function createBaseMsgCancel() {
     return {
@@ -611,6 +658,201 @@ export var MsgStoreResponse = {
         return message;
     }
 };
+function createBaseMsgRenew() {
+    return {
+        creator: "",
+        proposal: undefined,
+        jwsSignature: undefined
+    };
+}
+export var MsgRenew = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.proposal !== undefined) {
+            RenewProposal.encode(message.proposal, writer.uint32(18).fork()).ldelim();
+        }
+        if (message.jwsSignature !== undefined) {
+            JwsSignature.encode(message.jwsSignature, writer.uint32(26).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseMsgRenew();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.proposal = RenewProposal.decode(reader, reader.uint32());
+                    break;
+                case 3:
+                    message.jwsSignature = JwsSignature.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            creator: isSet(object.creator) ? String(object.creator) : "",
+            proposal: isSet(object.proposal) ? RenewProposal.fromJSON(object.proposal) : undefined,
+            jwsSignature: isSet(object.jwsSignature) ? JwsSignature.fromJSON(object.jwsSignature) : undefined
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.proposal !== undefined && (obj.proposal = message.proposal ? RenewProposal.toJSON(message.proposal) : undefined);
+        message.jwsSignature !== undefined && (obj.jwsSignature = message.jwsSignature ? JwsSignature.toJSON(message.jwsSignature) : undefined);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseMsgRenew();
+        var _object_creator;
+        message.creator = (_object_creator = object.creator) !== null && _object_creator !== void 0 ? _object_creator : "";
+        message.proposal = object.proposal !== undefined && object.proposal !== null ? RenewProposal.fromPartial(object.proposal) : undefined;
+        message.jwsSignature = object.jwsSignature !== undefined && object.jwsSignature !== null ? JwsSignature.fromPartial(object.jwsSignature) : undefined;
+        return message;
+    }
+};
+function createBaseMsgRenewResponse() {
+    return {
+        result: {}
+    };
+}
+export var MsgRenewResponse = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        Object.entries(message.result).forEach(function(param) {
+            var _param = _slicedToArray(param, 2), key = _param[0], value = _param[1];
+            MsgRenewResponse_ResultEntry.encode({
+                key: key,
+                value: value
+            }, writer.uint32(10).fork()).ldelim();
+        });
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseMsgRenewResponse();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    var entry1 = MsgRenewResponse_ResultEntry.decode(reader, reader.uint32());
+                    if (entry1.value !== undefined) {
+                        message.result[entry1.key] = entry1.value;
+                    }
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            result: isObject(object.result) ? Object.entries(object.result).reduce(function(acc, param) {
+                var _param = _slicedToArray(param, 2), key = _param[0], value = _param[1];
+                acc[key] = String(value);
+                return acc;
+            }, {}) : {}
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        obj.result = {};
+        if (message.result) {
+            Object.entries(message.result).forEach(function(param) {
+                var _param = _slicedToArray(param, 2), k = _param[0], v = _param[1];
+                obj.result[k] = v;
+            });
+        }
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseMsgRenewResponse();
+        var _object_result;
+        message.result = Object.entries((_object_result = object.result) !== null && _object_result !== void 0 ? _object_result : {}).reduce(function(acc, param) {
+            var _param = _slicedToArray(param, 2), key = _param[0], value = _param[1];
+            if (value !== undefined) {
+                acc[key] = String(value);
+            }
+            return acc;
+        }, {});
+        return message;
+    }
+};
+function createBaseMsgRenewResponse_ResultEntry() {
+    return {
+        key: "",
+        value: ""
+    };
+}
+export var MsgRenewResponse_ResultEntry = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.key !== "") {
+            writer.uint32(10).string(message.key);
+        }
+        if (message.value !== "") {
+            writer.uint32(18).string(message.value);
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseMsgRenewResponse_ResultEntry();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.key = reader.string();
+                    break;
+                case 2:
+                    message.value = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            key: isSet(object.key) ? String(object.key) : "",
+            value: isSet(object.value) ? String(object.value) : ""
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.key !== undefined && (obj.key = message.key);
+        message.value !== undefined && (obj.value = message.value);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseMsgRenewResponse_ResultEntry();
+        var _object_key;
+        message.key = (_object_key = object.key) !== null && _object_key !== void 0 ? _object_key : "";
+        var _object_value;
+        message.value = (_object_value = object.value) !== null && _object_value !== void 0 ? _object_value : "";
+        return message;
+    }
+};
 export var MsgClientImpl = /*#__PURE__*/ function() {
     "use strict";
     function MsgClientImpl(rpc) {
@@ -622,6 +864,7 @@ export var MsgClientImpl = /*#__PURE__*/ function() {
         this.Reject = this.Reject.bind(this);
         this.Terminate = this.Terminate.bind(this);
         this.Ready = this.Ready.bind(this);
+        this.Renew = this.Renew.bind(this);
     }
     var _proto = MsgClientImpl.prototype;
     _proto.Store = function Store(request) {
@@ -666,6 +909,13 @@ export var MsgClientImpl = /*#__PURE__*/ function() {
             return MsgReadyResponse.decode(new _m0.Reader(data));
         });
     };
+    _proto.Renew = function Renew(request) {
+        var data = MsgRenew.encode(request).finish();
+        var promise = this.rpc.request("saonetwork.sao.sao.Msg", "Renew", data);
+        return promise.then(function(data) {
+            return MsgRenewResponse.decode(new _m0.Reader(data));
+        });
+    };
     return MsgClientImpl;
 }();
 var globalThis = function() {
@@ -692,6 +942,9 @@ function longToNumber(long) {
 if (_m0.util.Long !== Long) {
     _m0.util.Long = Long;
     _m0.configure();
+}
+function isObject(value) {
+    return typeof value === "object" && value !== null;
 }
 function isSet(value) {
     return value !== null && value !== undefined;

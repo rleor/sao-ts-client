@@ -23,6 +23,12 @@ export interface NodeNode {
 
   /** @format float */
   reputation?: number;
+
+  /** @format int64 */
+  status?: number;
+
+  /** @format int64 */
+  lastAliveHeigh?: string;
 }
 
 /**
@@ -368,6 +374,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       "pagination.limit"?: string;
       "pagination.count_total"?: boolean;
       "pagination.reverse"?: boolean;
+      status?: number;
     },
     params: RequestParams = {},
   ) =>

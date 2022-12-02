@@ -192,7 +192,8 @@ export var QueryGetNodeResponse = {
 };
 function createBaseQueryAllNodeRequest() {
     return {
-        pagination: undefined
+        pagination: undefined,
+        status: 0
     };
 }
 export var QueryAllNodeRequest = {
@@ -200,6 +201,9 @@ export var QueryAllNodeRequest = {
         var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
         if (message.pagination !== undefined) {
             PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+        }
+        if (message.status !== 0) {
+            writer.uint32(16).uint32(message.status);
         }
         return writer;
     },
@@ -213,6 +217,9 @@ export var QueryAllNodeRequest = {
                 case 1:
                     message.pagination = PageRequest.decode(reader, reader.uint32());
                     break;
+                case 2:
+                    message.status = reader.uint32();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -222,17 +229,21 @@ export var QueryAllNodeRequest = {
     },
     fromJSON: function fromJSON(object) {
         return {
-            pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined
+            pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
+            status: isSet(object.status) ? Number(object.status) : 0
         };
     },
     toJSON: function toJSON(message) {
         var obj = {};
         message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+        message.status !== undefined && (obj.status = Math.round(message.status));
         return obj;
     },
     fromPartial: function fromPartial(object) {
         var message = createBaseQueryAllNodeRequest();
         message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+        var _object_status;
+        message.status = (_object_status = object.status) !== null && _object_status !== void 0 ? _object_status : 0;
         return message;
     }
 };

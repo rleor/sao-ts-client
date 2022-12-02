@@ -7,28 +7,22 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgLogout } from "./types/sao/node/tx";
-import { MsgLogin } from "./types/sao/node/tx";
 import { MsgClaimReward } from "./types/sao/node/tx";
+import { MsgLogout } from "./types/sao/node/tx";
 import { MsgReset } from "./types/sao/node/tx";
+import { MsgLogin } from "./types/sao/node/tx";
 
 
-export { MsgLogout, MsgLogin, MsgClaimReward, MsgReset };
-
-type sendMsgLogoutParams = {
-  value: MsgLogout,
-  fee?: StdFee,
-  memo?: string
-};
-
-type sendMsgLoginParams = {
-  value: MsgLogin,
-  fee?: StdFee,
-  memo?: string
-};
+export { MsgClaimReward, MsgLogout, MsgReset, MsgLogin };
 
 type sendMsgClaimRewardParams = {
   value: MsgClaimReward,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgLogoutParams = {
+  value: MsgLogout,
   fee?: StdFee,
   memo?: string
 };
@@ -39,21 +33,27 @@ type sendMsgResetParams = {
   memo?: string
 };
 
-
-type msgLogoutParams = {
-  value: MsgLogout,
-};
-
-type msgLoginParams = {
+type sendMsgLoginParams = {
   value: MsgLogin,
+  fee?: StdFee,
+  memo?: string
 };
+
 
 type msgClaimRewardParams = {
   value: MsgClaimReward,
 };
 
+type msgLogoutParams = {
+  value: MsgLogout,
+};
+
 type msgResetParams = {
   value: MsgReset,
+};
+
+type msgLoginParams = {
+  value: MsgLogin,
 };
 
 
@@ -74,34 +74,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgLogout({ value, fee, memo }: sendMsgLogoutParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgLogout: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgLogout({ value: MsgLogout.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgLogout: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
-		async sendMsgLogin({ value, fee, memo }: sendMsgLoginParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgLogin: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgLogin({ value: MsgLogin.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgLogin: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgClaimReward({ value, fee, memo }: sendMsgClaimRewardParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgClaimReward: Unable to sign Tx. Signer is not present.')
@@ -113,6 +85,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
 				throw new Error('TxClient:sendMsgClaimReward: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgLogout({ value, fee, memo }: sendMsgLogoutParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgLogout: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgLogout({ value: MsgLogout.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgLogout: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
@@ -130,22 +116,20 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		
-		msgLogout({ value }: msgLogoutParams): EncodeObject {
-			try {
-				return { typeUrl: "/saonetwork.sao.node.MsgLogout", value: MsgLogout.fromPartial( value ) }  
+		async sendMsgLogin({ value, fee, memo }: sendMsgLoginParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgLogin: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgLogin({ value: MsgLogin.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgLogout: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgLogin: Could not broadcast Tx: '+ e.message)
 			}
 		},
 		
-		msgLogin({ value }: msgLoginParams): EncodeObject {
-			try {
-				return { typeUrl: "/saonetwork.sao.node.MsgLogin", value: MsgLogin.fromPartial( value ) }  
-			} catch (e: any) {
-				throw new Error('TxClient:MsgLogin: Could not create message: ' + e.message)
-			}
-		},
 		
 		msgClaimReward({ value }: msgClaimRewardParams): EncodeObject {
 			try {
@@ -155,11 +139,27 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
+		msgLogout({ value }: msgLogoutParams): EncodeObject {
+			try {
+				return { typeUrl: "/saonetwork.sao.node.MsgLogout", value: MsgLogout.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgLogout: Could not create message: ' + e.message)
+			}
+		},
+		
 		msgReset({ value }: msgResetParams): EncodeObject {
 			try {
 				return { typeUrl: "/saonetwork.sao.node.MsgReset", value: MsgReset.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgReset: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgLogin({ value }: msgLoginParams): EncodeObject {
+			try {
+				return { typeUrl: "/saonetwork.sao.node.MsgLogin", value: MsgLogin.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgLogin: Could not create message: ' + e.message)
 			}
 		},
 		

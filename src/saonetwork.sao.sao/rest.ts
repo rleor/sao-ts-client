@@ -33,6 +33,10 @@ export type SaoMsgReadyResponse = object;
 
 export type SaoMsgRejectResponse = object;
 
+export interface SaoMsgRenewResponse {
+  result?: Record<string, string>;
+}
+
 export interface SaoMsgStoreResponse {
   /** @format uint64 */
   orderId?: string;
@@ -64,8 +68,16 @@ export interface SaoProposal {
   tags?: string[];
   cid?: string;
   rule?: string;
-  isUpdate?: boolean;
   extendInfo?: string;
+
+  /** @format uint64 */
+  size?: string;
+
+  /**
+   * 0: new|update, 1:force-push
+   * @format int64
+   */
+  operation?: number;
 }
 
 /**
@@ -74,6 +86,17 @@ export interface SaoProposal {
 export interface SaoQueryParamsResponse {
   /** params holds all the parameters of this module. */
   params?: SaoParams;
+}
+
+export interface SaoRenewProposal {
+  owner?: string;
+
+  /** @format int32 */
+  duration?: number;
+
+  /** @format int32 */
+  timeout?: number;
+  data?: string[];
 }
 
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, ResponseType } from "axios";

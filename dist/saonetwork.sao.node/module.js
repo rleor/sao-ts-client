@@ -132,11 +132,11 @@ import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry } from "@cosmjs/proto-signing";
 import { msgTypes } from "./registry";
 import { Api } from "./rest";
-import { MsgLogout } from "./types/sao/node/tx";
-import { MsgLogin } from "./types/sao/node/tx";
 import { MsgClaimReward } from "./types/sao/node/tx";
+import { MsgLogout } from "./types/sao/node/tx";
 import { MsgReset } from "./types/sao/node/tx";
-export { MsgLogout, MsgLogin, MsgClaimReward, MsgReset };
+import { MsgLogin } from "./types/sao/node/tx";
+export { MsgClaimReward, MsgLogout, MsgReset, MsgLogin };
 export var registry = new Registry(msgTypes);
 var defaultFee = {
     amount: [],
@@ -148,122 +148,6 @@ export var txClient = function() {
         prefix: "cosmos"
     }, signer = _ref.signer, prefix = _ref.prefix, addr = _ref.addr;
     return {
-        sendMsgLogout: function sendMsgLogout(param) {
-            var value = param.value, fee = param.fee, memo = param.memo;
-            return _asyncToGenerator(function() {
-                var address, signingClient, msg, e;
-                return __generator(this, function(_state) {
-                    switch(_state.label){
-                        case 0:
-                            if (!signer) {
-                                throw new Error("TxClient:sendMsgLogout: Unable to sign Tx. Signer is not present.");
-                            }
-                            _state.label = 1;
-                        case 1:
-                            _state.trys.push([
-                                1,
-                                5,
-                                ,
-                                6
-                            ]);
-                            return [
-                                4,
-                                signer.getAccounts()
-                            ];
-                        case 2:
-                            address = _state.sent()[0].address;
-                            return [
-                                4,
-                                SigningStargateClient.connectWithSigner(addr, signer, {
-                                    registry: registry,
-                                    prefix: prefix
-                                })
-                            ];
-                        case 3:
-                            signingClient = _state.sent();
-                            msg = this.msgLogout({
-                                value: MsgLogout.fromPartial(value)
-                            });
-                            return [
-                                4,
-                                signingClient.signAndBroadcast(address, [
-                                    msg
-                                ], fee ? fee : defaultFee, memo)
-                            ];
-                        case 4:
-                            return [
-                                2,
-                                _state.sent()
-                            ];
-                        case 5:
-                            e = _state.sent();
-                            throw new Error("TxClient:sendMsgLogout: Could not broadcast Tx: " + e.message);
-                        case 6:
-                            return [
-                                2
-                            ];
-                    }
-                });
-            }).apply(this);
-        },
-        sendMsgLogin: function sendMsgLogin(param) {
-            var value = param.value, fee = param.fee, memo = param.memo;
-            return _asyncToGenerator(function() {
-                var address, signingClient, msg, e;
-                return __generator(this, function(_state) {
-                    switch(_state.label){
-                        case 0:
-                            if (!signer) {
-                                throw new Error("TxClient:sendMsgLogin: Unable to sign Tx. Signer is not present.");
-                            }
-                            _state.label = 1;
-                        case 1:
-                            _state.trys.push([
-                                1,
-                                5,
-                                ,
-                                6
-                            ]);
-                            return [
-                                4,
-                                signer.getAccounts()
-                            ];
-                        case 2:
-                            address = _state.sent()[0].address;
-                            return [
-                                4,
-                                SigningStargateClient.connectWithSigner(addr, signer, {
-                                    registry: registry,
-                                    prefix: prefix
-                                })
-                            ];
-                        case 3:
-                            signingClient = _state.sent();
-                            msg = this.msgLogin({
-                                value: MsgLogin.fromPartial(value)
-                            });
-                            return [
-                                4,
-                                signingClient.signAndBroadcast(address, [
-                                    msg
-                                ], fee ? fee : defaultFee, memo)
-                            ];
-                        case 4:
-                            return [
-                                2,
-                                _state.sent()
-                            ];
-                        case 5:
-                            e = _state.sent();
-                            throw new Error("TxClient:sendMsgLogin: Could not broadcast Tx: " + e.message);
-                        case 6:
-                            return [
-                                2
-                            ];
-                    }
-                });
-            }).apply(this);
-        },
         sendMsgClaimReward: function sendMsgClaimReward(param) {
             var value = param.value, fee = param.fee, memo = param.memo;
             return _asyncToGenerator(function() {
@@ -314,6 +198,64 @@ export var txClient = function() {
                         case 5:
                             e = _state.sent();
                             throw new Error("TxClient:sendMsgClaimReward: Could not broadcast Tx: " + e.message);
+                        case 6:
+                            return [
+                                2
+                            ];
+                    }
+                });
+            }).apply(this);
+        },
+        sendMsgLogout: function sendMsgLogout(param) {
+            var value = param.value, fee = param.fee, memo = param.memo;
+            return _asyncToGenerator(function() {
+                var address, signingClient, msg, e;
+                return __generator(this, function(_state) {
+                    switch(_state.label){
+                        case 0:
+                            if (!signer) {
+                                throw new Error("TxClient:sendMsgLogout: Unable to sign Tx. Signer is not present.");
+                            }
+                            _state.label = 1;
+                        case 1:
+                            _state.trys.push([
+                                1,
+                                5,
+                                ,
+                                6
+                            ]);
+                            return [
+                                4,
+                                signer.getAccounts()
+                            ];
+                        case 2:
+                            address = _state.sent()[0].address;
+                            return [
+                                4,
+                                SigningStargateClient.connectWithSigner(addr, signer, {
+                                    registry: registry,
+                                    prefix: prefix
+                                })
+                            ];
+                        case 3:
+                            signingClient = _state.sent();
+                            msg = this.msgLogout({
+                                value: MsgLogout.fromPartial(value)
+                            });
+                            return [
+                                4,
+                                signingClient.signAndBroadcast(address, [
+                                    msg
+                                ], fee ? fee : defaultFee, memo)
+                            ];
+                        case 4:
+                            return [
+                                2,
+                                _state.sent()
+                            ];
+                        case 5:
+                            e = _state.sent();
+                            throw new Error("TxClient:sendMsgLogout: Could not broadcast Tx: " + e.message);
                         case 6:
                             return [
                                 2
@@ -380,27 +322,63 @@ export var txClient = function() {
                 });
             }).apply(this);
         },
-        msgLogout: function msgLogout(param) {
-            var value = param.value;
-            try {
-                return {
-                    typeUrl: "/saonetwork.sao.node.MsgLogout",
-                    value: MsgLogout.fromPartial(value)
-                };
-            } catch (e) {
-                throw new Error("TxClient:MsgLogout: Could not create message: " + e.message);
-            }
-        },
-        msgLogin: function msgLogin(param) {
-            var value = param.value;
-            try {
-                return {
-                    typeUrl: "/saonetwork.sao.node.MsgLogin",
-                    value: MsgLogin.fromPartial(value)
-                };
-            } catch (e) {
-                throw new Error("TxClient:MsgLogin: Could not create message: " + e.message);
-            }
+        sendMsgLogin: function sendMsgLogin(param) {
+            var value = param.value, fee = param.fee, memo = param.memo;
+            return _asyncToGenerator(function() {
+                var address, signingClient, msg, e;
+                return __generator(this, function(_state) {
+                    switch(_state.label){
+                        case 0:
+                            if (!signer) {
+                                throw new Error("TxClient:sendMsgLogin: Unable to sign Tx. Signer is not present.");
+                            }
+                            _state.label = 1;
+                        case 1:
+                            _state.trys.push([
+                                1,
+                                5,
+                                ,
+                                6
+                            ]);
+                            return [
+                                4,
+                                signer.getAccounts()
+                            ];
+                        case 2:
+                            address = _state.sent()[0].address;
+                            return [
+                                4,
+                                SigningStargateClient.connectWithSigner(addr, signer, {
+                                    registry: registry,
+                                    prefix: prefix
+                                })
+                            ];
+                        case 3:
+                            signingClient = _state.sent();
+                            msg = this.msgLogin({
+                                value: MsgLogin.fromPartial(value)
+                            });
+                            return [
+                                4,
+                                signingClient.signAndBroadcast(address, [
+                                    msg
+                                ], fee ? fee : defaultFee, memo)
+                            ];
+                        case 4:
+                            return [
+                                2,
+                                _state.sent()
+                            ];
+                        case 5:
+                            e = _state.sent();
+                            throw new Error("TxClient:sendMsgLogin: Could not broadcast Tx: " + e.message);
+                        case 6:
+                            return [
+                                2
+                            ];
+                    }
+                });
+            }).apply(this);
         },
         msgClaimReward: function msgClaimReward(param) {
             var value = param.value;
@@ -413,6 +391,17 @@ export var txClient = function() {
                 throw new Error("TxClient:MsgClaimReward: Could not create message: " + e.message);
             }
         },
+        msgLogout: function msgLogout(param) {
+            var value = param.value;
+            try {
+                return {
+                    typeUrl: "/saonetwork.sao.node.MsgLogout",
+                    value: MsgLogout.fromPartial(value)
+                };
+            } catch (e) {
+                throw new Error("TxClient:MsgLogout: Could not create message: " + e.message);
+            }
+        },
         msgReset: function msgReset(param) {
             var value = param.value;
             try {
@@ -422,6 +411,17 @@ export var txClient = function() {
                 };
             } catch (e) {
                 throw new Error("TxClient:MsgReset: Could not create message: " + e.message);
+            }
+        },
+        msgLogin: function msgLogin(param) {
+            var value = param.value;
+            try {
+                return {
+                    typeUrl: "/saonetwork.sao.node.MsgLogin",
+                    value: MsgLogin.fromPartial(value)
+                };
+            } catch (e) {
+                throw new Error("TxClient:MsgLogin: Could not create message: " + e.message);
             }
         }
     };

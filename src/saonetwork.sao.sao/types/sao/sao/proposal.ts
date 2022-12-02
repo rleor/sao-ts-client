@@ -1,4 +1,5 @@
 /* eslint-disable */
+import Long from "long";
 import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "saonetwork.sao.sao";
@@ -16,8 +17,10 @@ export interface Proposal {
   tags: string[];
   cid: string;
   rule: string;
-  isUpdate: boolean;
   extendInfo: string;
+  size: number;
+  /** 0: new|update, 1:force-push */
+  operation: number;
 }
 
 function createBaseProposal(): Proposal {
@@ -34,8 +37,9 @@ function createBaseProposal(): Proposal {
     tags: [],
     cid: "",
     rule: "",
-    isUpdate: false,
     extendInfo: "",
+    size: 0,
+    operation: 0,
   };
 }
 
@@ -77,11 +81,14 @@ export const Proposal = {
     if (message.rule !== "") {
       writer.uint32(98).string(message.rule);
     }
-    if (message.isUpdate === true) {
-      writer.uint32(104).bool(message.isUpdate);
-    }
     if (message.extendInfo !== "") {
-      writer.uint32(114).string(message.extendInfo);
+      writer.uint32(106).string(message.extendInfo);
+    }
+    if (message.size !== 0) {
+      writer.uint32(112).uint64(message.size);
+    }
+    if (message.operation !== 0) {
+      writer.uint32(120).uint32(message.operation);
     }
     return writer;
   },
@@ -130,10 +137,13 @@ export const Proposal = {
           message.rule = reader.string();
           break;
         case 13:
-          message.isUpdate = reader.bool();
+          message.extendInfo = reader.string();
           break;
         case 14:
-          message.extendInfo = reader.string();
+          message.size = longToNumber(reader.uint64() as Long);
+          break;
+        case 15:
+          message.operation = reader.uint32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -157,8 +167,9 @@ export const Proposal = {
       tags: Array.isArray(object?.tags) ? object.tags.map((e: any) => String(e)) : [],
       cid: isSet(object.cid) ? String(object.cid) : "",
       rule: isSet(object.rule) ? String(object.rule) : "",
-      isUpdate: isSet(object.isUpdate) ? Boolean(object.isUpdate) : false,
       extendInfo: isSet(object.extendInfo) ? String(object.extendInfo) : "",
+      size: isSet(object.size) ? Number(object.size) : 0,
+      operation: isSet(object.operation) ? Number(object.operation) : 0,
     };
   },
 
@@ -180,8 +191,9 @@ export const Proposal = {
     }
     message.cid !== undefined && (obj.cid = message.cid);
     message.rule !== undefined && (obj.rule = message.rule);
-    message.isUpdate !== undefined && (obj.isUpdate = message.isUpdate);
     message.extendInfo !== undefined && (obj.extendInfo = message.extendInfo);
+    message.size !== undefined && (obj.size = Math.round(message.size));
+    message.operation !== undefined && (obj.operation = Math.round(message.operation));
     return obj;
   },
 
@@ -199,11 +211,31 @@ export const Proposal = {
     message.tags = object.tags?.map((e) => e) || [];
     message.cid = object.cid ?? "";
     message.rule = object.rule ?? "";
-    message.isUpdate = object.isUpdate ?? false;
     message.extendInfo = object.extendInfo ?? "";
+    message.size = object.size ?? 0;
+    message.operation = object.operation ?? 0;
     return message;
   },
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+declare var global: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
@@ -215,6 +247,18 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function longToNumber(long: Long): number {
+  if (long.gt(Number.MAX_SAFE_INTEGER)) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  return long.toNumber();
+}
+
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

@@ -3,6 +3,7 @@ import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { JwsSignature } from "./jws_signature";
 import { Proposal } from "./proposal";
+import { RenewProposal } from "./renew_proposal";
 
 export const protobufPackage = "saonetwork.sao.sao";
 
@@ -56,6 +57,21 @@ export interface MsgStore {
 
 export interface MsgStoreResponse {
   orderId: number;
+}
+
+export interface MsgRenew {
+  creator: string;
+  proposal: RenewProposal | undefined;
+  jwsSignature: JwsSignature | undefined;
+}
+
+export interface MsgRenewResponse {
+  result: { [key: string]: string };
+}
+
+export interface MsgRenewResponse_ResultEntry {
+  key: string;
+  value: string;
 }
 
 function createBaseMsgCancel(): MsgCancel {
@@ -680,6 +696,201 @@ export const MsgStoreResponse = {
   },
 };
 
+function createBaseMsgRenew(): MsgRenew {
+  return { creator: "", proposal: undefined, jwsSignature: undefined };
+}
+
+export const MsgRenew = {
+  encode(message: MsgRenew, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.proposal !== undefined) {
+      RenewProposal.encode(message.proposal, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.jwsSignature !== undefined) {
+      JwsSignature.encode(message.jwsSignature, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRenew {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRenew();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.proposal = RenewProposal.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.jwsSignature = JwsSignature.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgRenew {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      proposal: isSet(object.proposal) ? RenewProposal.fromJSON(object.proposal) : undefined,
+      jwsSignature: isSet(object.jwsSignature) ? JwsSignature.fromJSON(object.jwsSignature) : undefined,
+    };
+  },
+
+  toJSON(message: MsgRenew): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.proposal !== undefined
+      && (obj.proposal = message.proposal ? RenewProposal.toJSON(message.proposal) : undefined);
+    message.jwsSignature !== undefined
+      && (obj.jwsSignature = message.jwsSignature ? JwsSignature.toJSON(message.jwsSignature) : undefined);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgRenew>, I>>(object: I): MsgRenew {
+    const message = createBaseMsgRenew();
+    message.creator = object.creator ?? "";
+    message.proposal = (object.proposal !== undefined && object.proposal !== null)
+      ? RenewProposal.fromPartial(object.proposal)
+      : undefined;
+    message.jwsSignature = (object.jwsSignature !== undefined && object.jwsSignature !== null)
+      ? JwsSignature.fromPartial(object.jwsSignature)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseMsgRenewResponse(): MsgRenewResponse {
+  return { result: {} };
+}
+
+export const MsgRenewResponse = {
+  encode(message: MsgRenewResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    Object.entries(message.result).forEach(([key, value]) => {
+      MsgRenewResponse_ResultEntry.encode({ key: key as any, value }, writer.uint32(10).fork()).ldelim();
+    });
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRenewResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRenewResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          const entry1 = MsgRenewResponse_ResultEntry.decode(reader, reader.uint32());
+          if (entry1.value !== undefined) {
+            message.result[entry1.key] = entry1.value;
+          }
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgRenewResponse {
+    return {
+      result: isObject(object.result)
+        ? Object.entries(object.result).reduce<{ [key: string]: string }>((acc, [key, value]) => {
+          acc[key] = String(value);
+          return acc;
+        }, {})
+        : {},
+    };
+  },
+
+  toJSON(message: MsgRenewResponse): unknown {
+    const obj: any = {};
+    obj.result = {};
+    if (message.result) {
+      Object.entries(message.result).forEach(([k, v]) => {
+        obj.result[k] = v;
+      });
+    }
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgRenewResponse>, I>>(object: I): MsgRenewResponse {
+    const message = createBaseMsgRenewResponse();
+    message.result = Object.entries(object.result ?? {}).reduce<{ [key: string]: string }>((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = String(value);
+      }
+      return acc;
+    }, {});
+    return message;
+  },
+};
+
+function createBaseMsgRenewResponse_ResultEntry(): MsgRenewResponse_ResultEntry {
+  return { key: "", value: "" };
+}
+
+export const MsgRenewResponse_ResultEntry = {
+  encode(message: MsgRenewResponse_ResultEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRenewResponse_ResultEntry {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRenewResponse_ResultEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.key = reader.string();
+          break;
+        case 2:
+          message.value = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgRenewResponse_ResultEntry {
+    return { key: isSet(object.key) ? String(object.key) : "", value: isSet(object.value) ? String(object.value) : "" };
+  },
+
+  toJSON(message: MsgRenewResponse_ResultEntry): unknown {
+    const obj: any = {};
+    message.key !== undefined && (obj.key = message.key);
+    message.value !== undefined && (obj.value = message.value);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<MsgRenewResponse_ResultEntry>, I>>(object: I): MsgRenewResponse_ResultEntry {
+    const message = createBaseMsgRenewResponse_ResultEntry();
+    message.key = object.key ?? "";
+    message.value = object.value ?? "";
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   Store(request: MsgStore): Promise<MsgStoreResponse>;
@@ -687,8 +898,9 @@ export interface Msg {
   Complete(request: MsgComplete): Promise<MsgCompleteResponse>;
   Reject(request: MsgReject): Promise<MsgRejectResponse>;
   Terminate(request: MsgTerminate): Promise<MsgTerminateResponse>;
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   Ready(request: MsgReady): Promise<MsgReadyResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  Renew(request: MsgRenew): Promise<MsgRenewResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -701,6 +913,7 @@ export class MsgClientImpl implements Msg {
     this.Reject = this.Reject.bind(this);
     this.Terminate = this.Terminate.bind(this);
     this.Ready = this.Ready.bind(this);
+    this.Renew = this.Renew.bind(this);
   }
   Store(request: MsgStore): Promise<MsgStoreResponse> {
     const data = MsgStore.encode(request).finish();
@@ -736,6 +949,12 @@ export class MsgClientImpl implements Msg {
     const data = MsgReady.encode(request).finish();
     const promise = this.rpc.request("saonetwork.sao.sao.Msg", "Ready", data);
     return promise.then((data) => MsgReadyResponse.decode(new _m0.Reader(data)));
+  }
+
+  Renew(request: MsgRenew): Promise<MsgRenewResponse> {
+    const data = MsgRenew.encode(request).finish();
+    const promise = this.rpc.request("saonetwork.sao.sao.Msg", "Renew", data);
+    return promise.then((data) => MsgRenewResponse.decode(new _m0.Reader(data)));
   }
 }
 
@@ -783,6 +1002,10 @@ function longToNumber(long: Long): number {
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isObject(value: any): boolean {
+  return typeof value === "object" && value !== null;
 }
 
 function isSet(value: any): boolean {

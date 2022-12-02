@@ -28,6 +28,7 @@ export interface QueryGetNodeResponse {
 
 export interface QueryAllNodeRequest {
   pagination: PageRequest | undefined;
+  status: number;
 }
 
 export interface QueryAllNodeResponse {
@@ -242,13 +243,16 @@ export const QueryGetNodeResponse = {
 };
 
 function createBaseQueryAllNodeRequest(): QueryAllNodeRequest {
-  return { pagination: undefined };
+  return { pagination: undefined, status: 0 };
 }
 
 export const QueryAllNodeRequest = {
   encode(message: QueryAllNodeRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.pagination !== undefined) {
       PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== 0) {
+      writer.uint32(16).uint32(message.status);
     }
     return writer;
   },
@@ -263,6 +267,9 @@ export const QueryAllNodeRequest = {
         case 1:
           message.pagination = PageRequest.decode(reader, reader.uint32());
           break;
+        case 2:
+          message.status = reader.uint32();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -272,13 +279,17 @@ export const QueryAllNodeRequest = {
   },
 
   fromJSON(object: any): QueryAllNodeRequest {
-    return { pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined };
+    return {
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
+      status: isSet(object.status) ? Number(object.status) : 0,
+    };
   },
 
   toJSON(message: QueryAllNodeRequest): unknown {
     const obj: any = {};
     message.pagination !== undefined
       && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    message.status !== undefined && (obj.status = Math.round(message.status));
     return obj;
   },
 
@@ -287,6 +298,7 @@ export const QueryAllNodeRequest = {
     message.pagination = (object.pagination !== undefined && object.pagination !== null)
       ? PageRequest.fromPartial(object.pagination)
       : undefined;
+    message.status = object.status ?? 0;
     return message;
   },
 };

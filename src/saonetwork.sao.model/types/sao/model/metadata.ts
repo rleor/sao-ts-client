@@ -17,6 +17,8 @@ export interface Metadata {
   update: boolean;
   commit: string;
   rule: string;
+  duration: number;
+  createdAt: number;
 }
 
 function createBaseMetadata(): Metadata {
@@ -33,6 +35,8 @@ function createBaseMetadata(): Metadata {
     update: false,
     commit: "",
     rule: "",
+    duration: 0,
+    createdAt: 0,
   };
 }
 
@@ -73,6 +77,12 @@ export const Metadata = {
     }
     if (message.rule !== "") {
       writer.uint32(98).string(message.rule);
+    }
+    if (message.duration !== 0) {
+      writer.uint32(104).uint64(message.duration);
+    }
+    if (message.createdAt !== 0) {
+      writer.uint32(112).uint64(message.createdAt);
     }
     return writer;
   },
@@ -120,6 +130,12 @@ export const Metadata = {
         case 12:
           message.rule = reader.string();
           break;
+        case 13:
+          message.duration = longToNumber(reader.uint64() as Long);
+          break;
+        case 14:
+          message.createdAt = longToNumber(reader.uint64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -142,6 +158,8 @@ export const Metadata = {
       update: isSet(object.update) ? Boolean(object.update) : false,
       commit: isSet(object.commit) ? String(object.commit) : "",
       rule: isSet(object.rule) ? String(object.rule) : "",
+      duration: isSet(object.duration) ? Number(object.duration) : 0,
+      createdAt: isSet(object.createdAt) ? Number(object.createdAt) : 0,
     };
   },
 
@@ -167,6 +185,8 @@ export const Metadata = {
     message.update !== undefined && (obj.update = message.update);
     message.commit !== undefined && (obj.commit = message.commit);
     message.rule !== undefined && (obj.rule = message.rule);
+    message.duration !== undefined && (obj.duration = Math.round(message.duration));
+    message.createdAt !== undefined && (obj.createdAt = Math.round(message.createdAt));
     return obj;
   },
 
@@ -184,6 +204,8 @@ export const Metadata = {
     message.update = object.update ?? false;
     message.commit = object.commit ?? "";
     message.rule = object.rule ?? "";
+    message.duration = object.duration ?? 0;
+    message.createdAt = object.createdAt ?? 0;
     return message;
   },
 };

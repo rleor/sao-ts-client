@@ -14,8 +14,7 @@ import _m0 from "protobufjs/minimal";
 export var protobufPackage = "saonetwork.sao.node";
 function createBaseMsgLogin() {
     return {
-        creator: "",
-        peer: ""
+        creator: ""
     };
 }
 export var MsgLogin = {
@@ -23,9 +22,6 @@ export var MsgLogin = {
         var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
         if (message.creator !== "") {
             writer.uint32(10).string(message.creator);
-        }
-        if (message.peer !== "") {
-            writer.uint32(18).string(message.peer);
         }
         return writer;
     },
@@ -39,9 +35,6 @@ export var MsgLogin = {
                 case 1:
                     message.creator = reader.string();
                     break;
-                case 2:
-                    message.peer = reader.string();
-                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -51,22 +44,18 @@ export var MsgLogin = {
     },
     fromJSON: function fromJSON(object) {
         return {
-            creator: isSet(object.creator) ? String(object.creator) : "",
-            peer: isSet(object.peer) ? String(object.peer) : ""
+            creator: isSet(object.creator) ? String(object.creator) : ""
         };
     },
     toJSON: function toJSON(message) {
         var obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.peer !== undefined && (obj.peer = message.peer);
         return obj;
     },
     fromPartial: function fromPartial(object) {
         var message = createBaseMsgLogin();
         var _object_creator;
         message.creator = (_object_creator = object.creator) !== null && _object_creator !== void 0 ? _object_creator : "";
-        var _object_peer;
-        message.peer = (_object_peer = object.peer) !== null && _object_peer !== void 0 ? _object_peer : "";
         return message;
     }
 };
@@ -188,7 +177,8 @@ export var MsgLogoutResponse = {
 function createBaseMsgReset() {
     return {
         creator: "",
-        peer: ""
+        peer: "",
+        status: 0
     };
 }
 export var MsgReset = {
@@ -199,6 +189,9 @@ export var MsgReset = {
         }
         if (message.peer !== "") {
             writer.uint32(18).string(message.peer);
+        }
+        if (message.status !== 0) {
+            writer.uint32(24).uint32(message.status);
         }
         return writer;
     },
@@ -215,6 +208,9 @@ export var MsgReset = {
                 case 2:
                     message.peer = reader.string();
                     break;
+                case 3:
+                    message.status = reader.uint32();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -225,13 +221,15 @@ export var MsgReset = {
     fromJSON: function fromJSON(object) {
         return {
             creator: isSet(object.creator) ? String(object.creator) : "",
-            peer: isSet(object.peer) ? String(object.peer) : ""
+            peer: isSet(object.peer) ? String(object.peer) : "",
+            status: isSet(object.status) ? Number(object.status) : 0
         };
     },
     toJSON: function toJSON(message) {
         var obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
         message.peer !== undefined && (obj.peer = message.peer);
+        message.status !== undefined && (obj.status = Math.round(message.status));
         return obj;
     },
     fromPartial: function fromPartial(object) {
@@ -240,6 +238,8 @@ export var MsgReset = {
         message.creator = (_object_creator = object.creator) !== null && _object_creator !== void 0 ? _object_creator : "";
         var _object_peer;
         message.peer = (_object_peer = object.peer) !== null && _object_peer !== void 0 ? _object_peer : "";
+        var _object_status;
+        message.status = (_object_status = object.status) !== null && _object_status !== void 0 ? _object_status : 0;
         return message;
     }
 };

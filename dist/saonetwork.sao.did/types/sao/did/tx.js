@@ -13,6 +13,7 @@ function _instanceof(left, right) {
 import _m0 from "protobufjs/minimal";
 import { AccountAuth } from "./account_auth";
 import { BindingProof } from "./binding_proof";
+import { PubKey } from "./pub_key";
 export var protobufPackage = "saonetwork.sao.did";
 function createBaseMsgAddBinding() {
     return {
@@ -480,8 +481,7 @@ export var MsgUpdateAccountAuthsResponse = {
 function createBaseMsgUpdateSidDocument() {
     return {
         creator: "",
-        signingKey: "",
-        encryptKey: "",
+        keys: [],
         rootDocId: ""
     };
 }
@@ -491,14 +491,28 @@ export var MsgUpdateSidDocument = {
         if (message.creator !== "") {
             writer.uint32(10).string(message.creator);
         }
-        if (message.signingKey !== "") {
-            writer.uint32(18).string(message.signingKey);
-        }
-        if (message.encryptKey !== "") {
-            writer.uint32(26).string(message.encryptKey);
+        var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
+        try {
+            for(var _iterator = message.keys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true){
+                var v = _step.value;
+                PubKey.encode(v, writer.uint32(18).fork()).ldelim();
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally{
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return != null) {
+                    _iterator.return();
+                }
+            } finally{
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
         }
         if (message.rootDocId !== "") {
-            writer.uint32(34).string(message.rootDocId);
+            writer.uint32(26).string(message.rootDocId);
         }
         return writer;
     },
@@ -513,12 +527,9 @@ export var MsgUpdateSidDocument = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.signingKey = reader.string();
+                    message.keys.push(PubKey.decode(reader, reader.uint32()));
                     break;
                 case 3:
-                    message.encryptKey = reader.string();
-                    break;
-                case 4:
                     message.rootDocId = reader.string();
                     break;
                 default:
@@ -531,27 +542,33 @@ export var MsgUpdateSidDocument = {
     fromJSON: function fromJSON(object) {
         return {
             creator: isSet(object.creator) ? String(object.creator) : "",
-            signingKey: isSet(object.signingKey) ? String(object.signingKey) : "",
-            encryptKey: isSet(object.encryptKey) ? String(object.encryptKey) : "",
+            keys: Array.isArray(object === null || object === void 0 ? void 0 : object.keys) ? object.keys.map(function(e) {
+                return PubKey.fromJSON(e);
+            }) : [],
             rootDocId: isSet(object.rootDocId) ? String(object.rootDocId) : ""
         };
     },
     toJSON: function toJSON(message) {
         var obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.signingKey !== undefined && (obj.signingKey = message.signingKey);
-        message.encryptKey !== undefined && (obj.encryptKey = message.encryptKey);
+        if (message.keys) {
+            obj.keys = message.keys.map(function(e) {
+                return e ? PubKey.toJSON(e) : undefined;
+            });
+        } else {
+            obj.keys = [];
+        }
         message.rootDocId !== undefined && (obj.rootDocId = message.rootDocId);
         return obj;
     },
     fromPartial: function fromPartial(object) {
+        var _object_keys;
         var message = createBaseMsgUpdateSidDocument();
         var _object_creator;
         message.creator = (_object_creator = object.creator) !== null && _object_creator !== void 0 ? _object_creator : "";
-        var _object_signingKey;
-        message.signingKey = (_object_signingKey = object.signingKey) !== null && _object_signingKey !== void 0 ? _object_signingKey : "";
-        var _object_encryptKey;
-        message.encryptKey = (_object_encryptKey = object.encryptKey) !== null && _object_encryptKey !== void 0 ? _object_encryptKey : "";
+        message.keys = ((_object_keys = object.keys) === null || _object_keys === void 0 ? void 0 : _object_keys.map(function(e) {
+            return PubKey.fromPartial(e);
+        })) || [];
         var _object_rootDocId;
         message.rootDocId = (_object_rootDocId = object.rootDocId) !== null && _object_rootDocId !== void 0 ? _object_rootDocId : "";
         return message;
@@ -707,6 +724,271 @@ export var MsgAddPastSeedResponse = {
         return message;
     }
 };
+function createBaseMsgCleanupSidDocuments() {
+    return {
+        creator: "",
+        rootDocId: ""
+    };
+}
+export var MsgCleanupSidDocuments = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.rootDocId !== "") {
+            writer.uint32(18).string(message.rootDocId);
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseMsgCleanupSidDocuments();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.rootDocId = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            creator: isSet(object.creator) ? String(object.creator) : "",
+            rootDocId: isSet(object.rootDocId) ? String(object.rootDocId) : ""
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.rootDocId !== undefined && (obj.rootDocId = message.rootDocId);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseMsgCleanupSidDocuments();
+        var _object_creator;
+        message.creator = (_object_creator = object.creator) !== null && _object_creator !== void 0 ? _object_creator : "";
+        var _object_rootDocId;
+        message.rootDocId = (_object_rootDocId = object.rootDocId) !== null && _object_rootDocId !== void 0 ? _object_rootDocId : "";
+        return message;
+    }
+};
+function createBaseMsgCleanupSidDocumentsResponse() {
+    return {};
+}
+export var MsgCleanupSidDocumentsResponse = {
+    encode: function encode(_) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseMsgCleanupSidDocumentsResponse();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(_) {
+        return {};
+    },
+    toJSON: function toJSON(_) {
+        var obj = {};
+        return obj;
+    },
+    fromPartial: function fromPartial(_) {
+        var message = createBaseMsgCleanupSidDocumentsResponse();
+        return message;
+    }
+};
+function createBaseMsgCleanupPastSeeds() {
+    return {
+        creator: "",
+        did: ""
+    };
+}
+export var MsgCleanupPastSeeds = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.did !== "") {
+            writer.uint32(18).string(message.did);
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseMsgCleanupPastSeeds();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.did = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            creator: isSet(object.creator) ? String(object.creator) : "",
+            did: isSet(object.did) ? String(object.did) : ""
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.did !== undefined && (obj.did = message.did);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseMsgCleanupPastSeeds();
+        var _object_creator;
+        message.creator = (_object_creator = object.creator) !== null && _object_creator !== void 0 ? _object_creator : "";
+        var _object_did;
+        message.did = (_object_did = object.did) !== null && _object_did !== void 0 ? _object_did : "";
+        return message;
+    }
+};
+function createBaseMsgCleanupPastSeedsResponse() {
+    return {};
+}
+export var MsgCleanupPastSeedsResponse = {
+    encode: function encode(_) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseMsgCleanupPastSeedsResponse();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(_) {
+        return {};
+    },
+    toJSON: function toJSON(_) {
+        var obj = {};
+        return obj;
+    },
+    fromPartial: function fromPartial(_) {
+        var message = createBaseMsgCleanupPastSeedsResponse();
+        return message;
+    }
+};
+function createBaseMsgResetStore() {
+    return {
+        creator: ""
+    };
+}
+export var MsgResetStore = {
+    encode: function encode(message) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        if (message.creator !== "") {
+            writer.uint32(10).string(message.creator);
+        }
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseMsgResetStore();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(object) {
+        return {
+            creator: isSet(object.creator) ? String(object.creator) : ""
+        };
+    },
+    toJSON: function toJSON(message) {
+        var obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        return obj;
+    },
+    fromPartial: function fromPartial(object) {
+        var message = createBaseMsgResetStore();
+        var _object_creator;
+        message.creator = (_object_creator = object.creator) !== null && _object_creator !== void 0 ? _object_creator : "";
+        return message;
+    }
+};
+function createBaseMsgResetStoreResponse() {
+    return {};
+}
+export var MsgResetStoreResponse = {
+    encode: function encode(_) {
+        var writer = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : _m0.Writer.create();
+        return writer;
+    },
+    decode: function decode(input, length) {
+        var reader = _instanceof(input, _m0.Reader) ? input : new _m0.Reader(input);
+        var end = length === undefined ? reader.len : reader.pos + length;
+        var message = createBaseMsgResetStoreResponse();
+        while(reader.pos < end){
+            var tag = reader.uint32();
+            switch(tag >>> 3){
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON: function fromJSON(_) {
+        return {};
+    },
+    toJSON: function toJSON(_) {
+        var obj = {};
+        return obj;
+    },
+    fromPartial: function fromPartial(_) {
+        var message = createBaseMsgResetStoreResponse();
+        return message;
+    }
+};
 export var MsgClientImpl = /*#__PURE__*/ function() {
     "use strict";
     function MsgClientImpl(rpc) {
@@ -718,6 +1000,9 @@ export var MsgClientImpl = /*#__PURE__*/ function() {
         this.UpdateAccountAuths = this.UpdateAccountAuths.bind(this);
         this.UpdateSidDocument = this.UpdateSidDocument.bind(this);
         this.AddPastSeed = this.AddPastSeed.bind(this);
+        this.CleanupSidDocuments = this.CleanupSidDocuments.bind(this);
+        this.CleanupPastSeeds = this.CleanupPastSeeds.bind(this);
+        this.ResetStore = this.ResetStore.bind(this);
     }
     var _proto = MsgClientImpl.prototype;
     _proto.AddBinding = function AddBinding(request) {
@@ -760,6 +1045,27 @@ export var MsgClientImpl = /*#__PURE__*/ function() {
         var promise = this.rpc.request("saonetwork.sao.did.Msg", "AddPastSeed", data);
         return promise.then(function(data) {
             return MsgAddPastSeedResponse.decode(new _m0.Reader(data));
+        });
+    };
+    _proto.CleanupSidDocuments = function CleanupSidDocuments(request) {
+        var data = MsgCleanupSidDocuments.encode(request).finish();
+        var promise = this.rpc.request("saonetwork.sao.did.Msg", "CleanupSidDocuments", data);
+        return promise.then(function(data) {
+            return MsgCleanupSidDocumentsResponse.decode(new _m0.Reader(data));
+        });
+    };
+    _proto.CleanupPastSeeds = function CleanupPastSeeds(request) {
+        var data = MsgCleanupPastSeeds.encode(request).finish();
+        var promise = this.rpc.request("saonetwork.sao.did.Msg", "CleanupPastSeeds", data);
+        return promise.then(function(data) {
+            return MsgCleanupPastSeedsResponse.decode(new _m0.Reader(data));
+        });
+    };
+    _proto.ResetStore = function ResetStore(request) {
+        var data = MsgResetStore.encode(request).finish();
+        var promise = this.rpc.request("saonetwork.sao.did.Msg", "ResetStore", data);
+        return promise.then(function(data) {
+            return MsgResetStoreResponse.decode(new _m0.Reader(data));
         });
     };
     return MsgClientImpl;

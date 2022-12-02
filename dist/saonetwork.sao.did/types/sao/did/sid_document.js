@@ -6,12 +6,12 @@
     }
 }
 import _m0 from "protobufjs/minimal";
+import { PubKey } from "./pub_key";
 export var protobufPackage = "saonetwork.sao.did";
 function createBaseSidDocument() {
     return {
         versionId: "",
-        signing: "",
-        encryption: ""
+        keys: []
     };
 }
 export var SidDocument = {
@@ -20,11 +20,25 @@ export var SidDocument = {
         if (message.versionId !== "") {
             writer.uint32(10).string(message.versionId);
         }
-        if (message.signing !== "") {
-            writer.uint32(18).string(message.signing);
-        }
-        if (message.encryption !== "") {
-            writer.uint32(26).string(message.encryption);
+        var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
+        try {
+            for(var _iterator = message.keys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true){
+                var v = _step.value;
+                PubKey.encode(v, writer.uint32(18).fork()).ldelim();
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally{
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return != null) {
+                    _iterator.return();
+                }
+            } finally{
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
         }
         return writer;
     },
@@ -39,10 +53,7 @@ export var SidDocument = {
                     message.versionId = reader.string();
                     break;
                 case 2:
-                    message.signing = reader.string();
-                    break;
-                case 3:
-                    message.encryption = reader.string();
+                    message.keys.push(PubKey.decode(reader, reader.uint32()));
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -54,25 +65,31 @@ export var SidDocument = {
     fromJSON: function fromJSON(object) {
         return {
             versionId: isSet(object.versionId) ? String(object.versionId) : "",
-            signing: isSet(object.signing) ? String(object.signing) : "",
-            encryption: isSet(object.encryption) ? String(object.encryption) : ""
+            keys: Array.isArray(object === null || object === void 0 ? void 0 : object.keys) ? object.keys.map(function(e) {
+                return PubKey.fromJSON(e);
+            }) : []
         };
     },
     toJSON: function toJSON(message) {
         var obj = {};
         message.versionId !== undefined && (obj.versionId = message.versionId);
-        message.signing !== undefined && (obj.signing = message.signing);
-        message.encryption !== undefined && (obj.encryption = message.encryption);
+        if (message.keys) {
+            obj.keys = message.keys.map(function(e) {
+                return e ? PubKey.toJSON(e) : undefined;
+            });
+        } else {
+            obj.keys = [];
+        }
         return obj;
     },
     fromPartial: function fromPartial(object) {
+        var _object_keys;
         var message = createBaseSidDocument();
         var _object_versionId;
         message.versionId = (_object_versionId = object.versionId) !== null && _object_versionId !== void 0 ? _object_versionId : "";
-        var _object_signing;
-        message.signing = (_object_signing = object.signing) !== null && _object_signing !== void 0 ? _object_signing : "";
-        var _object_encryption;
-        message.encryption = (_object_encryption = object.encryption) !== null && _object_encryption !== void 0 ? _object_encryption : "";
+        message.keys = ((_object_keys = object.keys) === null || _object_keys === void 0 ? void 0 : _object_keys.map(function(e) {
+            return PubKey.fromPartial(e);
+        })) || [];
         return message;
     }
 };

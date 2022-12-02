@@ -5,7 +5,6 @@ export const protobufPackage = "saonetwork.sao.node";
 
 export interface MsgLogin {
   creator: string;
-  peer: string;
 }
 
 export interface MsgLoginResponse {
@@ -21,6 +20,7 @@ export interface MsgLogoutResponse {
 export interface MsgReset {
   creator: string;
   peer: string;
+  status: number;
 }
 
 export interface MsgResetResponse {
@@ -34,16 +34,13 @@ export interface MsgClaimRewardResponse {
 }
 
 function createBaseMsgLogin(): MsgLogin {
-  return { creator: "", peer: "" };
+  return { creator: "" };
 }
 
 export const MsgLogin = {
   encode(message: MsgLogin, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
-    }
-    if (message.peer !== "") {
-      writer.uint32(18).string(message.peer);
     }
     return writer;
   },
@@ -58,9 +55,6 @@ export const MsgLogin = {
         case 1:
           message.creator = reader.string();
           break;
-        case 2:
-          message.peer = reader.string();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -70,23 +64,18 @@ export const MsgLogin = {
   },
 
   fromJSON(object: any): MsgLogin {
-    return {
-      creator: isSet(object.creator) ? String(object.creator) : "",
-      peer: isSet(object.peer) ? String(object.peer) : "",
-    };
+    return { creator: isSet(object.creator) ? String(object.creator) : "" };
   },
 
   toJSON(message: MsgLogin): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
-    message.peer !== undefined && (obj.peer = message.peer);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<MsgLogin>, I>>(object: I): MsgLogin {
     const message = createBaseMsgLogin();
     message.creator = object.creator ?? "";
-    message.peer = object.peer ?? "";
     return message;
   },
 };
@@ -217,7 +206,7 @@ export const MsgLogoutResponse = {
 };
 
 function createBaseMsgReset(): MsgReset {
-  return { creator: "", peer: "" };
+  return { creator: "", peer: "", status: 0 };
 }
 
 export const MsgReset = {
@@ -227,6 +216,9 @@ export const MsgReset = {
     }
     if (message.peer !== "") {
       writer.uint32(18).string(message.peer);
+    }
+    if (message.status !== 0) {
+      writer.uint32(24).uint32(message.status);
     }
     return writer;
   },
@@ -244,6 +236,9 @@ export const MsgReset = {
         case 2:
           message.peer = reader.string();
           break;
+        case 3:
+          message.status = reader.uint32();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -256,6 +251,7 @@ export const MsgReset = {
     return {
       creator: isSet(object.creator) ? String(object.creator) : "",
       peer: isSet(object.peer) ? String(object.peer) : "",
+      status: isSet(object.status) ? Number(object.status) : 0,
     };
   },
 
@@ -263,6 +259,7 @@ export const MsgReset = {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
     message.peer !== undefined && (obj.peer = message.peer);
+    message.status !== undefined && (obj.status = Math.round(message.status));
     return obj;
   },
 
@@ -270,6 +267,7 @@ export const MsgReset = {
     const message = createBaseMsgReset();
     message.creator = object.creator ?? "";
     message.peer = object.peer ?? "";
+    message.status = object.status ?? 0;
     return message;
   },
 };

@@ -5,6 +5,7 @@
         return left instanceof right;
     }
 }
+import Long from "long";
 import _m0 from "protobufjs/minimal";
 export var protobufPackage = "saonetwork.sao.sao";
 function createBaseProposal() {
@@ -21,8 +22,9 @@ function createBaseProposal() {
         tags: [],
         cid: "",
         rule: "",
-        isUpdate: false,
-        extendInfo: ""
+        extendInfo: "",
+        size: 0,
+        operation: 0
     };
 }
 export var Proposal = {
@@ -81,11 +83,14 @@ export var Proposal = {
         if (message.rule !== "") {
             writer.uint32(98).string(message.rule);
         }
-        if (message.isUpdate === true) {
-            writer.uint32(104).bool(message.isUpdate);
-        }
         if (message.extendInfo !== "") {
-            writer.uint32(114).string(message.extendInfo);
+            writer.uint32(106).string(message.extendInfo);
+        }
+        if (message.size !== 0) {
+            writer.uint32(112).uint64(message.size);
+        }
+        if (message.operation !== 0) {
+            writer.uint32(120).uint32(message.operation);
         }
         return writer;
     },
@@ -133,10 +138,13 @@ export var Proposal = {
                     message.rule = reader.string();
                     break;
                 case 13:
-                    message.isUpdate = reader.bool();
+                    message.extendInfo = reader.string();
                     break;
                 case 14:
-                    message.extendInfo = reader.string();
+                    message.size = longToNumber(reader.uint64());
+                    break;
+                case 15:
+                    message.operation = reader.uint32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -161,8 +169,9 @@ export var Proposal = {
             }) : [],
             cid: isSet(object.cid) ? String(object.cid) : "",
             rule: isSet(object.rule) ? String(object.rule) : "",
-            isUpdate: isSet(object.isUpdate) ? Boolean(object.isUpdate) : false,
-            extendInfo: isSet(object.extendInfo) ? String(object.extendInfo) : ""
+            extendInfo: isSet(object.extendInfo) ? String(object.extendInfo) : "",
+            size: isSet(object.size) ? Number(object.size) : 0,
+            operation: isSet(object.operation) ? Number(object.operation) : 0
         };
     },
     toJSON: function toJSON(message) {
@@ -185,8 +194,9 @@ export var Proposal = {
         }
         message.cid !== undefined && (obj.cid = message.cid);
         message.rule !== undefined && (obj.rule = message.rule);
-        message.isUpdate !== undefined && (obj.isUpdate = message.isUpdate);
         message.extendInfo !== undefined && (obj.extendInfo = message.extendInfo);
+        message.size !== undefined && (obj.size = Math.round(message.size));
+        message.operation !== undefined && (obj.operation = Math.round(message.operation));
         return obj;
     },
     fromPartial: function fromPartial(object) {
@@ -217,13 +227,40 @@ export var Proposal = {
         message.cid = (_object_cid = object.cid) !== null && _object_cid !== void 0 ? _object_cid : "";
         var _object_rule;
         message.rule = (_object_rule = object.rule) !== null && _object_rule !== void 0 ? _object_rule : "";
-        var _object_isUpdate;
-        message.isUpdate = (_object_isUpdate = object.isUpdate) !== null && _object_isUpdate !== void 0 ? _object_isUpdate : false;
         var _object_extendInfo;
         message.extendInfo = (_object_extendInfo = object.extendInfo) !== null && _object_extendInfo !== void 0 ? _object_extendInfo : "";
+        var _object_size;
+        message.size = (_object_size = object.size) !== null && _object_size !== void 0 ? _object_size : 0;
+        var _object_operation;
+        message.operation = (_object_operation = object.operation) !== null && _object_operation !== void 0 ? _object_operation : 0;
         return message;
     }
 };
+var globalThis = function() {
+    if (typeof globalThis !== "undefined") {
+        return globalThis;
+    }
+    if (typeof self !== "undefined") {
+        return self;
+    }
+    if (typeof window !== "undefined") {
+        return window;
+    }
+    if (typeof global !== "undefined") {
+        return global;
+    }
+    throw "Unable to locate global object";
+}();
+function longToNumber(long) {
+    if (long.gt(Number.MAX_SAFE_INTEGER)) {
+        throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+    }
+    return long.toNumber();
+}
+if (_m0.util.Long !== Long) {
+    _m0.util.Long = Long;
+    _m0.configure();
+}
 function isSet(value) {
     return value !== null && value !== undefined;
 }

@@ -1,6 +1,8 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
+import { Coin } from "../../cosmos/base/v1beta1/coin";
+import { Metadata } from "./metadata";
 import { Shard } from "./shard";
 
 export const protobufPackage = "saonetwork.sao.order";
@@ -15,8 +17,11 @@ export interface Order {
   expire: number;
   status: number;
   replica: number;
-  metadata: string;
+  metadata: Metadata | undefined;
   shards: { [key: string]: Shard };
+  amount: Coin | undefined;
+  size: number;
+  operation: number;
 }
 
 export interface Order_ShardsEntry {
@@ -35,8 +40,11 @@ function createBaseOrder(): Order {
     expire: 0,
     status: 0,
     replica: 0,
-    metadata: "",
+    metadata: undefined,
     shards: {},
+    amount: undefined,
+    size: 0,
+    operation: 0,
   };
 }
 
@@ -69,12 +77,21 @@ export const Order = {
     if (message.replica !== 0) {
       writer.uint32(72).int32(message.replica);
     }
-    if (message.metadata !== "") {
-      writer.uint32(82).string(message.metadata);
+    if (message.metadata !== undefined) {
+      Metadata.encode(message.metadata, writer.uint32(82).fork()).ldelim();
     }
     Object.entries(message.shards).forEach(([key, value]) => {
       Order_ShardsEntry.encode({ key: key as any, value }, writer.uint32(90).fork()).ldelim();
     });
+    if (message.amount !== undefined) {
+      Coin.encode(message.amount, writer.uint32(98).fork()).ldelim();
+    }
+    if (message.size !== 0) {
+      writer.uint32(104).uint64(message.size);
+    }
+    if (message.operation !== 0) {
+      writer.uint32(112).int32(message.operation);
+    }
     return writer;
   },
 
@@ -113,13 +130,22 @@ export const Order = {
           message.replica = reader.int32();
           break;
         case 10:
-          message.metadata = reader.string();
+          message.metadata = Metadata.decode(reader, reader.uint32());
           break;
         case 11:
           const entry11 = Order_ShardsEntry.decode(reader, reader.uint32());
           if (entry11.value !== undefined) {
             message.shards[entry11.key] = entry11.value;
           }
+          break;
+        case 12:
+          message.amount = Coin.decode(reader, reader.uint32());
+          break;
+        case 13:
+          message.size = longToNumber(reader.uint64() as Long);
+          break;
+        case 14:
+          message.operation = reader.int32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -140,13 +166,16 @@ export const Order = {
       expire: isSet(object.expire) ? Number(object.expire) : 0,
       status: isSet(object.status) ? Number(object.status) : 0,
       replica: isSet(object.replica) ? Number(object.replica) : 0,
-      metadata: isSet(object.metadata) ? String(object.metadata) : "",
+      metadata: isSet(object.metadata) ? Metadata.fromJSON(object.metadata) : undefined,
       shards: isObject(object.shards)
         ? Object.entries(object.shards).reduce<{ [key: string]: Shard }>((acc, [key, value]) => {
           acc[key] = Shard.fromJSON(value);
           return acc;
         }, {})
         : {},
+      amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined,
+      size: isSet(object.size) ? Number(object.size) : 0,
+      operation: isSet(object.operation) ? Number(object.operation) : 0,
     };
   },
 
@@ -161,13 +190,16 @@ export const Order = {
     message.expire !== undefined && (obj.expire = Math.round(message.expire));
     message.status !== undefined && (obj.status = Math.round(message.status));
     message.replica !== undefined && (obj.replica = Math.round(message.replica));
-    message.metadata !== undefined && (obj.metadata = message.metadata);
+    message.metadata !== undefined && (obj.metadata = message.metadata ? Metadata.toJSON(message.metadata) : undefined);
     obj.shards = {};
     if (message.shards) {
       Object.entries(message.shards).forEach(([k, v]) => {
         obj.shards[k] = Shard.toJSON(v);
       });
     }
+    message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
+    message.size !== undefined && (obj.size = Math.round(message.size));
+    message.operation !== undefined && (obj.operation = Math.round(message.operation));
     return obj;
   },
 
@@ -182,13 +214,20 @@ export const Order = {
     message.expire = object.expire ?? 0;
     message.status = object.status ?? 0;
     message.replica = object.replica ?? 0;
-    message.metadata = object.metadata ?? "";
+    message.metadata = (object.metadata !== undefined && object.metadata !== null)
+      ? Metadata.fromPartial(object.metadata)
+      : undefined;
     message.shards = Object.entries(object.shards ?? {}).reduce<{ [key: string]: Shard }>((acc, [key, value]) => {
       if (value !== undefined) {
         acc[key] = Shard.fromPartial(value);
       }
       return acc;
     }, {});
+    message.amount = (object.amount !== undefined && object.amount !== null)
+      ? Coin.fromPartial(object.amount)
+      : undefined;
+    message.size = object.size ?? 0;
+    message.operation = object.operation ?? 0;
     return message;
   },
 };

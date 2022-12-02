@@ -21,7 +21,9 @@ function createBaseMetadata() {
         extendInfo: "",
         update: false,
         commit: "",
-        rule: ""
+        rule: "",
+        duration: 0,
+        createdAt: 0
     };
 }
 export var Metadata = {
@@ -97,6 +99,12 @@ export var Metadata = {
         if (message.rule !== "") {
             writer.uint32(98).string(message.rule);
         }
+        if (message.duration !== 0) {
+            writer.uint32(104).uint64(message.duration);
+        }
+        if (message.createdAt !== 0) {
+            writer.uint32(112).uint64(message.createdAt);
+        }
         return writer;
     },
     decode: function decode(input, length) {
@@ -142,6 +150,12 @@ export var Metadata = {
                 case 12:
                     message.rule = reader.string();
                     break;
+                case 13:
+                    message.duration = longToNumber(reader.uint64());
+                    break;
+                case 14:
+                    message.createdAt = longToNumber(reader.uint64());
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -166,7 +180,9 @@ export var Metadata = {
             extendInfo: isSet(object.extendInfo) ? String(object.extendInfo) : "",
             update: isSet(object.update) ? Boolean(object.update) : false,
             commit: isSet(object.commit) ? String(object.commit) : "",
-            rule: isSet(object.rule) ? String(object.rule) : ""
+            rule: isSet(object.rule) ? String(object.rule) : "",
+            duration: isSet(object.duration) ? Number(object.duration) : 0,
+            createdAt: isSet(object.createdAt) ? Number(object.createdAt) : 0
         };
     },
     toJSON: function toJSON(message) {
@@ -195,6 +211,8 @@ export var Metadata = {
         message.update !== undefined && (obj.update = message.update);
         message.commit !== undefined && (obj.commit = message.commit);
         message.rule !== undefined && (obj.rule = message.rule);
+        message.duration !== undefined && (obj.duration = Math.round(message.duration));
+        message.createdAt !== undefined && (obj.createdAt = Math.round(message.createdAt));
         return obj;
     },
     fromPartial: function fromPartial(object) {
@@ -226,6 +244,10 @@ export var Metadata = {
         message.commit = (_object_commit = object.commit) !== null && _object_commit !== void 0 ? _object_commit : "";
         var _object_rule;
         message.rule = (_object_rule = object.rule) !== null && _object_rule !== void 0 ? _object_rule : "";
+        var _object_duration;
+        message.duration = (_object_duration = object.duration) !== null && _object_duration !== void 0 ? _object_duration : 0;
+        var _object_createdAt;
+        message.createdAt = (_object_createdAt = object.createdAt) !== null && _object_createdAt !== void 0 ? _object_createdAt : 0;
         return message;
     }
 };

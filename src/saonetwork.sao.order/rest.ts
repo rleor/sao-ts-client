@@ -9,6 +9,29 @@
  * ---------------------------------------------------------------
  */
 
+export interface OrderMetadata {
+  dataId?: string;
+  owner?: string;
+  alias?: string;
+  groupId?: string;
+
+  /** @format uint64 */
+  orderId?: string;
+  tags?: string[];
+  cid?: string;
+  commits?: string[];
+  extendInfo?: string;
+  update?: boolean;
+  commit?: string;
+  rule?: string;
+
+  /** @format uint64 */
+  duration?: string;
+
+  /** @format uint64 */
+  createdAt?: string;
+}
+
 export interface OrderOrder {
   creator?: string;
   owner?: string;
@@ -29,8 +52,22 @@ export interface OrderOrder {
 
   /** @format int32 */
   replica?: number;
-  metadata?: string;
+  metadata?: OrderMetadata;
   shards?: Record<string, OrderShard>;
+
+  /**
+   * Coin defines a token with a denomination and an amount.
+   *
+   * NOTE: The amount field is an Int which implements the custom method
+   * signatures required by gogoproto.
+   */
+  amount?: V1Beta1Coin;
+
+  /** @format uint64 */
+  size?: string;
+
+  /** @format int32 */
+  operation?: number;
 }
 
 /**
@@ -98,8 +135,35 @@ export interface OrderShard {
   size?: number;
   cid?: string;
 
+  /**
+   * Coin defines a token with a denomination and an amount.
+   *
+   * NOTE: The amount field is an Int which implements the custom method
+   * signatures required by gogoproto.
+   */
+  pledge?: V1Beta1Coin;
+
   /** @format uint64 */
-  pledge?: string;
+  duration?: string;
+
+  /** @format uint64 */
+  createdAt?: string;
+
+  /**
+   * Coin defines a token with a denomination and an amount.
+   *
+   * NOTE: The amount field is an Int which implements the custom method
+   * signatures required by gogoproto.
+   */
+  amount?: V1Beta1Coin;
+
+  /**
+   * Coin defines a token with a denomination and an amount.
+   *
+   * NOTE: The amount field is an Int which implements the custom method
+   * signatures required by gogoproto.
+   */
+  paid?: V1Beta1Coin;
 }
 
 export interface ProtobufAny {
@@ -111,6 +175,17 @@ export interface RpcStatus {
   code?: number;
   message?: string;
   details?: ProtobufAny[];
+}
+
+/**
+* Coin defines a token with a denomination and an amount.
+
+NOTE: The amount field is an Int which implements the custom method
+signatures required by gogoproto.
+*/
+export interface V1Beta1Coin {
+  denom?: string;
+  amount?: string;
 }
 
 /**

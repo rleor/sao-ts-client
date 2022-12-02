@@ -1,16 +1,16 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
+import { PubKey } from "./pub_key";
 
 export const protobufPackage = "saonetwork.sao.did";
 
 export interface SidDocument {
   versionId: string;
-  signing: string;
-  encryption: string;
+  keys: PubKey[];
 }
 
 function createBaseSidDocument(): SidDocument {
-  return { versionId: "", signing: "", encryption: "" };
+  return { versionId: "", keys: [] };
 }
 
 export const SidDocument = {
@@ -18,11 +18,8 @@ export const SidDocument = {
     if (message.versionId !== "") {
       writer.uint32(10).string(message.versionId);
     }
-    if (message.signing !== "") {
-      writer.uint32(18).string(message.signing);
-    }
-    if (message.encryption !== "") {
-      writer.uint32(26).string(message.encryption);
+    for (const v of message.keys) {
+      PubKey.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -38,10 +35,7 @@ export const SidDocument = {
           message.versionId = reader.string();
           break;
         case 2:
-          message.signing = reader.string();
-          break;
-        case 3:
-          message.encryption = reader.string();
+          message.keys.push(PubKey.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -54,24 +48,25 @@ export const SidDocument = {
   fromJSON(object: any): SidDocument {
     return {
       versionId: isSet(object.versionId) ? String(object.versionId) : "",
-      signing: isSet(object.signing) ? String(object.signing) : "",
-      encryption: isSet(object.encryption) ? String(object.encryption) : "",
+      keys: Array.isArray(object?.keys) ? object.keys.map((e: any) => PubKey.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: SidDocument): unknown {
     const obj: any = {};
     message.versionId !== undefined && (obj.versionId = message.versionId);
-    message.signing !== undefined && (obj.signing = message.signing);
-    message.encryption !== undefined && (obj.encryption = message.encryption);
+    if (message.keys) {
+      obj.keys = message.keys.map((e) => e ? PubKey.toJSON(e) : undefined);
+    } else {
+      obj.keys = [];
+    }
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<SidDocument>, I>>(object: I): SidDocument {
     const message = createBaseSidDocument();
     message.versionId = object.versionId ?? "";
-    message.signing = object.signing ?? "";
-    message.encryption = object.encryption ?? "";
+    message.keys = object.keys?.map((e) => PubKey.fromPartial(e)) || [];
     return message;
   },
 };
